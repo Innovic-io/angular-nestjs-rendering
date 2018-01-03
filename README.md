@@ -28,14 +28,14 @@ npm start
 * Production port is specified in .env ( default to 5400 )
 
 ```bash
-npm run prod:build
+npm run build:universal
 ```
 
 ```bash
 
 # test production
 
-npm run prod:server
+npm run serve:universal
 ```
 
 ### ToDo
