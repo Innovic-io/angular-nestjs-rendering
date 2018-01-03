@@ -4,34 +4,40 @@ import 'reflect-metadata';
 
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
+import * as dotenv from 'dotenv';
 
-import { ApplicationModule } from './app.module';
+dotenv.config();
+
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { enableProdMode } from '@angular/core';
 import { renderModuleFactory } from '@angular/platform-server';
+import { FOLDER_CLIENT, FOLDER_DIST } from '../shared/constants';
+
+import { ApplicationModule } from './app.module';
 
 const app = express();
 
 async function bootstrap() {
 
-  serverRenderingAngular(app);
+  if (process.env.NODE_ENV === 'production') {
+    serverRenderingAngular(app);
+  }
+
   const server = await NestFactory.create(ApplicationModule, app);
 
-  await server.listen(3666);
+  await server.listen(process.env.PORT || 3666);
 }
 
 function serverRenderingAngular(expressApp: express.Express) {
 
   enableProdMode();
 
-  const DIST_FOLDER = join(process.cwd(), 'dist');
-
   // after build
-  const template = readFileSync(join(DIST_FOLDER, 'client', 'index.html')).toString();
+  const template = readFileSync(join(FOLDER_DIST, FOLDER_CLIENT, 'index.html')).toString();
 
-  const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../dist/server/main.bundle');
+  const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../../dist/server/main.bundle');
 
   const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
 
@@ -50,21 +56,10 @@ function serverRenderingAngular(expressApp: express.Express) {
   });
 
   expressApp.set('view engine', 'html');
-  expressApp.set('views', join(DIST_FOLDER, 'client'));
+  expressApp.set('views', join(FOLDER_DIST, FOLDER_CLIENT));
 
   // Server static files from /client
-  expressApp.get('*.*', express.static(join(DIST_FOLDER, 'client')));
-
-  // All regular routes use the Universal engine
-  expressApp.get('*', (req, res, next) => {
-
-    if (req.url.search(/api/) >= 0) {
-      return next();
-    }
-
-    res.render(join(DIST_FOLDER, 'client', 'index.html'), { req });
-  });
-
+  expressApp.get('*.*', express.static(join(FOLDER_DIST, FOLDER_CLIENT)));
 }
 
 bootstrap();

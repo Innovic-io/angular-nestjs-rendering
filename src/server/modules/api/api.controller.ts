@@ -4,7 +4,10 @@ import { Controller, Get } from '@nestjs/common';
 export class ApiController {
 
   @Get('hello')
-  root(): string {
-    return 'Hello World!';
+  root() {
+
+    return {
+      message: 'Hello World!'
+    };
   }
 }
