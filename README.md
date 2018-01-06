@@ -37,9 +37,3 @@ npm run build:universal
 
 npm run serve:universal
 ```
-
-### ToDo
-
-- Server side linting
-- Unit tests on server Code
-- e2e tests

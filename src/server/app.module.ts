@@ -6,7 +6,7 @@ import { StaticModule } from './modules/static/static.module';
 @Module({
   imports: [
     ApiModule,
-    StaticModule
+    StaticModule,
   ],
   controllers: [],
   components: [],

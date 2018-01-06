@@ -22,7 +22,7 @@ const app = express();
 async function bootstrap() {
 
   if (process.env.NODE_ENV === 'production') {
-    serverRenderingAngular(app);
+    serverRender(app);
   }
 
   const server = await NestFactory.create(ApplicationModule, app);
@@ -30,7 +30,12 @@ async function bootstrap() {
   await server.listen(process.env.PORT || 3666);
 }
 
-function serverRenderingAngular(expressApp: express.Express) {
+/**
+ * Render Angular on Server Side instead on client
+ *
+ * @param {e.Express} expressApp
+ */
+function serverRender(expressApp: express.Express) {
 
   enableProdMode();
 
@@ -48,8 +53,8 @@ function serverRenderingAngular(expressApp: express.Express) {
       url: options.req.url,
       // DI so that we can get lazy-loading to work differently (since we need it to just instantly render it)
       extraProviders: [
-        provideModuleMap(LAZY_MODULE_MAP)
-      ]
+        provideModuleMap(LAZY_MODULE_MAP),
+      ],
     }).then(html => {
       callback(null, html);
     });

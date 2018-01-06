@@ -7,7 +7,7 @@ export class ApiController {
   root() {
 
     return {
-      message: 'Hello World!'
+      message: 'Hello World!',
     };
   }
 }
