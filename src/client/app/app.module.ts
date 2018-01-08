@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { routes } from './app.routing';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
-import { PingService } from './shared/services/services';
+import { PingService } from './shared/services/ping.services';
 
 const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
 

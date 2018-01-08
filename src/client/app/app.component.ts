@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PingService } from './shared/services/services';
+import { PingService } from './shared/services/ping.services';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
