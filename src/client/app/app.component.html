@@ -12,4 +12,17 @@
   <li><a routerLink="contact">Contact</a></li>
 </ul>
 
+<hr />
 
+<h4>Web Sockets</h4>
+
+<p>
+  <button (click)="ping()">Ping server using websockets</button>
+</p>
+
+<div>
+  Response from server:
+</div>
+<pre>
+{{ pongMessage$ | async | json }}
+</pre>

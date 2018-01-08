@@ -1,7 +1,7 @@
 {
-  "watch": ["server"],
+  "watch": ["./src/server"],
   "ext": "ts",
-  "ignore": ["server/**/*.spec.ts"],
+  "ignore": ["./src/server/**/*.spec.ts"],
   "exec": "node ./index",
   "env": {
     "NODE_ENV": "development"

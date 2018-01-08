@@ -7,6 +7,11 @@
  <a href="https://angular.io" target="blank"><img height="155px" src="https://angular.io/assets/images/logos/angular/angular.svg" /></a>
  <a href="http://nestjs.com/" target="blank"><img height="155px" src="http://kamilmysliwiec.com/public/nest-logo.png#1" alt="Nest Logo" /></a>
   
+### Included
+
+- REST API
+- WebSockets  
+  
 ### Install
 
 ```bash
