@@ -1,6 +1,6 @@
 import { ApiController } from './api.controller';
 
-describe('api.controller', function() {
+describe('api.controller', () => {
 
   it('root get', () => {
 

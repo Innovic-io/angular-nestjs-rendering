@@ -1,0 +1,42 @@
+type Query {
+  getPets: [Pet]
+  pet(id: ID!): Pet
+  owner(id: ID!): Owner
+  getOwners: [Owner]
+  petOwner(id: ID!): PetOwner
+}
+
+type Mutation {
+  createPet(name: String!, species: String!, age: Int): Pet
+  updatePet(id: ID!, name: String, species: String, age: Int): Pet
+  createOwner(first_name: String!, last_name: String!,
+    mobile: String, email: String): Owner
+  createPetOwnerById(petID: Int!, ownerID: Int!): PetOwner
+}
+
+type Owner {
+  id: Int
+  first_name: String
+  last_name: String
+  mobile: String
+  email: String
+}
+
+type PetOwner {
+  id: Int
+  pet: Pet
+  owner: Owner
+}
+
+type Pet {
+  id: Int
+  name: String
+  species: String
+  age: Int
+}
+
+
+type PetSpecies {
+  id: Int
+  speciesName: String
+}
