@@ -47,6 +47,7 @@ function serverRender(expressApp: express.Express) {
   const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
 
   expressApp.engine('html', (_, options, callback) => {
+
     renderModuleFactory(AppServerModuleNgFactory, {
       // Our index.html
       document: template,
