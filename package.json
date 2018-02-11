@@ -36,20 +36,27 @@
     "@nestjs/testing": "^4.4.0",
     "@nestjs/websockets": "^4.5.8",
     "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
+    "apollo-angular": "^1.0.1",
+    "apollo-angular-link-http": "^1.0.2-beta.0",
+    "apollo-cache-inmemory": "^1.1.7",
+    "apollo-client": "^2.2.3",
+    "apollo-link": "^1.1.0",
     "apollo-server-express": "^1.2.0",
+    "copy-webpack-plugin": "^4.4.1",
     "core-js": "^2.4.1",
     "dotenv": "^4.0.0",
     "graphql": "^0.11.7",
+    "graphql-tag": "^2.7.3",
     "graphql-tools": "^2.11.0",
+    "mockgoose-fix": "latest",
+    "mongoose": "latest",
     "ng-socket-io": "^0.2.4",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.4.3",
-    "zone.js": "^0.8.20",
-    "mongoose": "latest",
-    "mockgoose-fix": "latest"
+    "zone.js": "^0.8.20"
   },
   "devDependencies": {
-    "@angular/cli": "1.6.3",
+    "@angular/cli": "^1.6.8n",
     "@angular/compiler-cli": "^5.2.4",
     "@angular/language-service": "^5.2.4",
     "@types/dotenv": "^4.0.2",
@@ -73,6 +80,6 @@
     "ts-loader": "^3.5.0",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "^2.7.1"
+    "typescript": "~2.4.2"
   }
 }

@@ -1,12 +1,12 @@
-import {MiddlewaresConsumer, Module, RequestMethod} from '@nestjs/common';
-import {GraphQLFactory, GraphQLModule} from '@nestjs/graphql';
-import {graphiqlExpress, graphqlExpress} from 'apollo-server-express';
+import { MiddlewaresConsumer, Module, RequestMethod } from '@nestjs/common';
+import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
+import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
-import {PetsModule} from './modules/graphql/pets.module';
-import {ApiModule} from './modules/api/api.module';
-import {CatsModule} from './modules/cats/cats.module';
+import { PetsModule } from './modules/graphql/pets.module';
+import { ApiModule } from './modules/api/api.module';
+import { CatsModule } from './modules/cats/cats.module';
 
 @Module({
   imports: [
@@ -22,7 +22,8 @@ import {CatsModule} from './modules/cats/cats.module';
   ],
 })
 export class ApplicationModule {
-  constructor(private readonly graphQLFactory: GraphQLFactory) {}
+  constructor(private readonly graphQLFactory: GraphQLFactory) {
+  }
 
   configure(consumer: MiddlewaresConsumer) {
     const schema = this.createSchema();

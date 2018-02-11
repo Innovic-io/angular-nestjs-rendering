@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PingService } from './shared/services/ping.services';
 import { Observable } from 'rxjs/Observable';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+
+import { PingService } from './shared/services/ping.services';
 
 @Component({
   selector: 'app-root',
@@ -10,14 +13,17 @@ import { Observable } from 'rxjs/Observable';
 export class AppComponent implements OnInit {
 
   pongMessage$: Observable<any>;
+  pets$: Observable<any>;
 
-  constructor(private pingService: PingService) {}
+  constructor(private pingService: PingService, private apollo: Apollo) {}
 
   ping() {
     this.pingService.sendPing(new Date());
   }
 
   ngOnInit() {
+
+    this.pets$ = this.apollo.query({query: gql`{ getPets { name, id } }`});
 
     this.pongMessage$ = this.pingService.getPong();
   }

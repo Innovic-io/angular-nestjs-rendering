@@ -1,20 +1,19 @@
-import { Component, Req, UseGuards } from '@nestjs/common';
-import { Query, Mutation, Resolver, DelegateProperty } from '@nestjs/graphql';
+import { Req, UseGuards } from '@nestjs/common';
+import { DelegateProperty, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { MergeInfo } from 'graphql-tools/dist/Interfaces';
 
-import {IOwner, IPet} from './interfaces/pet.interface';
+import { IOwner, IPet } from './interfaces/pet.interface';
 import { PetsService } from './pets.service';
 import { PetsGuard } from './pets.guard';
-import { MergeInfo } from 'graphql-tools/dist/Interfaces';
-import {OwnerService} from './services/owner.service';
-import {PetOwnerService} from './services/petowner.service';
+import { OwnerService } from './services/owner.service';
+import { PetOwnerService } from './services/petowner.service';
 
 @Resolver('Pet')
 export class PetsResolvers {
-  constructor(
-    private readonly petsService: PetsService,
-    private readonly ownerService: OwnerService,
-    private readonly petOwnerService: PetOwnerService
-  ) {}
+  constructor(private readonly petsService: PetsService,
+              private readonly ownerService: OwnerService,
+              private readonly petOwnerService: PetOwnerService) {
+  }
 
   @Query()
   @UseGuards(PetsGuard)
@@ -73,7 +72,7 @@ export class PetsResolvers {
     if (!pet || !owner) {
       throw new Error('Bad Request');
     }
-    return await this.petOwnerService.create({pet, owner});
+    return await this.petOwnerService.create({ pet, owner });
   }
 
   @DelegateProperty('human')

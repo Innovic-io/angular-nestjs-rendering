@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
+import { Apollo, ApolloModule } from 'apollo-angular';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routing';
@@ -22,6 +25,9 @@ const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
     BrowserModule.withServerTransition({ appId: 'nestJS' }),
     HttpClientModule,
     SocketIoModule.forRoot(config),
+    HttpClientModule, // provides HttpClient for HttpLink
+    ApolloModule,
+    HttpLinkModule,
     RouterModule.forRoot(routes, {
       useHash: false,
       preloadingStrategy: PreloadAllModules,
@@ -32,4 +38,14 @@ const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(apollo: Apollo, httpLink: HttpLink) {
+
+    apollo.create({
+      link: httpLink.create({ uri: '/graphql' }),
+      cache: new InMemoryCache()
+    });
+  }
+}
+
