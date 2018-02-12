@@ -1,18 +1,20 @@
 import { Req, UseGuards } from '@nestjs/common';
 import { DelegateProperty, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
+import { ApolloError } from 'apollo-client';
 
-import { IOwner, IPet } from './interfaces/pet.interface';
+import { IOwner, IPet, IPetSpecies } from './interfaces/pet.interface';
 import { PetsService } from './services/pets.service';
 import { PetsGuard } from './pets.guard';
 import { OwnerService } from './services/owner.service';
-import { PetOwnerService } from './services/petowner.service';
+import { dummySpecies } from './dummy.data';
 
 @Resolver('Pet')
 export class PetsResolvers {
+  private species: IPetSpecies[] = dummySpecies;
+
   constructor(private readonly petsService: PetsService,
-              private readonly ownerService: OwnerService,
-              private readonly petOwnerService: PetOwnerService) {
+              private readonly ownerService: OwnerService) {
   }
 
   @Query()
@@ -30,26 +32,26 @@ export class PetsResolvers {
   }
 
   @Query('pet')
-  async findOnePetById(query: { id: string | number}, @Req() request?) {
+  async findOnePetById(query: { id: string | number }, @Req() request?) {
 
     return await this.petsService.findOneById(+query.id);
   }
 
   @Query('owner')
-  async findOneOwnerById(query: { id: string | number}, @Req() request?) {
+  async findOneOwnerById(query: { id: string | number }, @Req() request?) {
 
     return await this.ownerService.findOneById(+query.id);
-  }
-
-  @Query('petOwner')
-  async findOnePetOwnerById(query: { id: string | number}, @Req() request?) {
-    return await this.petOwnerService.findOneById(+query.id);
   }
 
   @Mutation('createPet')
   async createPet(obj, args: IPet, context, info) {
 
-    return await this.petsService.create(args);
+    if (!args.owners) {
+      const owner = this.ownerService.findOneById(+args.owners);
+      Object.assign(args, { owners: [ owner ] });
+    }
+
+    return args; // await this.petsService.create(args);
   }
 
   @Mutation('updatePet')
@@ -64,22 +66,39 @@ export class PetsResolvers {
     return await this.petsService.deletePet(+args.id);
   }
 
+  @Mutation('addOwnerToPet')
+  async updatePetsOwner(obj, args, context, info) {
+
+    const updateObject = {
+      id: args.id,
+      owners: args.owners,
+    };
+
+    return await this.petsService.update(updateObject);
+  }
+
+  @Mutation('removeOwnerFromPet')
+  async removeOwnerFromPet(obj, args, context, info) {
+
+    const owner = await this.ownerService.findOneById(args.owners.id);
+    if (!owner) {
+
+      throw new ApolloError({ networkError: Error('owner not exist') });
+    }
+
+    return await this.petsService.removeOwner(args.id, owner);
+  }
+
   @Mutation('createOwner')
   async createOwner(obj, args: IOwner, context, info) {
 
     return await this.ownerService.create(args);
   }
 
-  @Mutation('createPetOwnerById')
-  async createPetOwner(obj, args, context, info) {
+  @Mutation('updateOwner')
+  async updateOwner(obj, args: IOwner, context, info) {
 
-    const pet = await this.petsService.findOneById(+args.petID);
-    const owner = await this.ownerService.findOneById(+args.ownerID);
-
-    if (!pet || !owner) {
-      throw new Error('Bad Request');
-    }
-    return await this.petOwnerService.create({ pet, owner });
+    return await this.ownerService.update(args);
   }
 
   @DelegateProperty('human')

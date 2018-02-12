@@ -2,7 +2,8 @@ export interface IPet {
   readonly id?: number;
   readonly name: string;
   readonly age: number;
-  readonly species: string;
+  readonly species: IPetSpecies;
+  readonly owners?: IOwner[];
 }
 
 export interface  IPetSpecies {
@@ -14,12 +15,7 @@ export interface  IOwner {
   readonly id?: number;
   readonly first_name: string;
   readonly last_name: string;
-  readonly mobile: string;
-  readonly email: string;
-}
-
-export interface  IPetOwner {
-  readonly id?: number;
-  readonly pet: IPet;
-  readonly owner: IOwner;
+  readonly mobile?: string;
+  readonly email?: string;
+  readonly pets?: IPet[];
 }

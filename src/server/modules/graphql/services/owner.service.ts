@@ -20,6 +20,17 @@ export class OwnerService {
     return toPush;
   }
 
+  update(owner) {
+    owner.id = +owner.id;
+
+    const index = this.owners.findIndex((oneOwner) => oneOwner.id === owner.id);
+    const result = this.findOneById(owner.id);
+
+    this.owners[index] = Object.assign({}, result, owner);
+
+    return result;
+  }
+
   findAll(): IOwner[] {
     return this.owners;
   }

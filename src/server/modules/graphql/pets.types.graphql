@@ -3,19 +3,33 @@ type Query {
   pet(id: ID!): Pet
   owner(id: ID!): Owner
   getOwners: [Owner]
-  petOwner(id: ID!): PetOwner
-  getPetOwners: [PetOwner]
+  getSpecies: [PetSpecies]
 }
 
+scalar Species
+
 type Mutation {
-  createPet(name: String!, species: String!, age: Int): Pet
-  updatePet(id: ID!, name: String, species: String, age: Int): Pet
+  createPet(name: String!, species: Species!,
+    age: Int, owner: ID!): Pet
+  updatePet(id: ID!, name: String,
+    species: ID!, age: Int
+  ): Pet
+  removeOwnerFromPet(petID: ID!, owners: ID!): Pet
+  addOwnerToPet(petID: ID!, owners: ID!): Pet
   deletePet(id: ID!): Pet
 
-  createOwner(first_name: String!, last_name: String!,
-    mobile: String, email: String): Owner
+  createOwner(first_name: String!,
+    last_name: String!, mobile: String,
+    email: String): Owner
+  updateOwner(id: ID!, first_name: String,
+  last_name: String, mobile: String,
+  email: String): Owner
+}
 
-  createPetOwnerById(petID: Int!, ownerID: Int!): PetOwner
+
+type PetSpecies {
+  id: ID!
+  speciesName: String
 }
 
 type Owner {
@@ -24,23 +38,13 @@ type Owner {
   last_name: String
   mobile: String
   email: String
-}
-
-type PetOwner {
-  id: ID!
-  pet: Pet
-  owner: Owner
+  pets: [Pet]
 }
 
 type Pet {
   id: ID!
   name: String
-  species: String
+  species: PetSpecies
   age: Int
-}
-
-
-type PetSpecies {
-  id: ID!
-  speciesName: String
+  owners: [Owner]
 }
