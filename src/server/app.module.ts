@@ -6,12 +6,10 @@ import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
 import { PetsModule } from './modules/graphql/pets.module';
 import { ApiModule } from './modules/api/api.module';
-import { CatsModule } from './modules/cats/cats.module';
 
 @Module({
   imports: [
     StaticModule,
-    CatsModule,
     PetsModule,
     GraphQLModule,
     ApiModule,

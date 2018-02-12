@@ -4,18 +4,22 @@ type Query {
   owner(id: ID!): Owner
   getOwners: [Owner]
   petOwner(id: ID!): PetOwner
+  getPetOwners: [PetOwner]
 }
 
 type Mutation {
   createPet(name: String!, species: String!, age: Int): Pet
   updatePet(id: ID!, name: String, species: String, age: Int): Pet
+  deletePet(id: ID!): Pet
+
   createOwner(first_name: String!, last_name: String!,
     mobile: String, email: String): Owner
+
   createPetOwnerById(petID: Int!, ownerID: Int!): PetOwner
 }
 
 type Owner {
-  id: Int
+  id: ID!
   first_name: String
   last_name: String
   mobile: String
@@ -23,13 +27,13 @@ type Owner {
 }
 
 type PetOwner {
-  id: Int
+  id: ID!
   pet: Pet
   owner: Owner
 }
 
 type Pet {
-  id: Int
+  id: ID!
   name: String
   species: String
   age: Int
@@ -37,6 +41,6 @@ type Pet {
 
 
 type PetSpecies {
-  id: Int
+  id: ID!
   speciesName: String
 }

@@ -19,7 +19,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection {
 
     const response = {
       ping: data,
-      pong: new Date()
+      pong: new Date(),
     };
 
     return { event, data: response };

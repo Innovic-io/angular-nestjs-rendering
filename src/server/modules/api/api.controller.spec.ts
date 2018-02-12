@@ -7,7 +7,7 @@ describe('api.controller', () => {
     const apiController = new ApiController();
 
     expect(apiController.root()).toEqual({
-      message: 'Hello World!'
+      message: 'Hello World!',
     });
   });
 });

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import {DATABASE_TOKEN, DATABASE_TEST_URI, DATABASE_URI, LOGGER_TOKEN} from './database.constants';
+import { DATABASE_TOKEN, DATABASE_URI } from './database.constants';
 
 export const databaseProviders = [
   {
@@ -24,7 +24,7 @@ export const databaseProviders = [
       } else {
 */
 
-        await mongoose.connect(DATABASE_URI, {
+      await mongoose.connect(DATABASE_URI, {
           useMongoClient: true,
         });
   //    }

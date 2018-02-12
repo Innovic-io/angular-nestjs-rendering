@@ -1,6 +1,6 @@
 import { Component } from '@nestjs/common';
 import { IPet } from '../interfaces/pet.interface';
-import {dummyPets} from '../dummy.data';
+import { dummyPets } from '../dummy.data';
 
 @Component()
 // tslint:disable-next-line
@@ -16,7 +16,27 @@ export class PetsService {
     return toPush;
   }
 
-  findAll(): IPet[] {
+  update(pet) {
+    pet.id = +pet.id;
+
+    const index = this.pets.findIndex((pets) => pets.id === pet.id);
+    const result = this.findOneById(pet.id);
+
+    this.pets[index] = Object.assign({}, result, pet);
+
+    return result;
+  }
+
+  deletePet(id) {
+
+    const index = this.pets.findIndex((pets) => pets.id === id);
+
+    const [ removedItem ] = this.pets.splice(index, 1);
+
+    return removedItem;
+  }
+
+  findAllPets(): IPet[] {
     return this.pets;
   }
 

@@ -3,7 +3,7 @@ import { DelegateProperty, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
 
 import { IOwner, IPet } from './interfaces/pet.interface';
-import { PetsService } from './pets.service';
+import { PetsService } from './services/pets.service';
 import { PetsGuard } from './pets.guard';
 import { OwnerService } from './services/owner.service';
 import { PetOwnerService } from './services/petowner.service';
@@ -30,19 +30,19 @@ export class PetsResolvers {
   }
 
   @Query('pet')
-  async findOneById(@Req() req, query: { id: string }) {
+  async findOnePetById(query: { id: string | number}, @Req() request?) {
 
     return await this.petsService.findOneById(+query.id);
   }
 
   @Query('owner')
-  async findOneOwnerById(@Req() req, query: { id: string }) {
+  async findOneOwnerById(query: { id: string | number}, @Req() request?) {
 
     return await this.ownerService.findOneById(+query.id);
   }
 
   @Query('petOwner')
-  async findOnePetOwnerById(@Req() req, query: { id: string }) {
+  async findOnePetOwnerById(query: { id: string | number}, @Req() request?) {
     return await this.petOwnerService.findOneById(+query.id);
   }
 
@@ -55,7 +55,13 @@ export class PetsResolvers {
   @Mutation('updatePet')
   async updatePet(obj, args: IPet, context, info) {
 
-    return await this.petsService.create(args);
+    return await this.petsService.update(args);
+  }
+
+  @Mutation('deletePet')
+  async deletePet(obj, args, context, info) {
+
+    return await this.petsService.deletePet(+args.id);
   }
 
   @Mutation('createOwner')
@@ -66,6 +72,7 @@ export class PetsResolvers {
 
   @Mutation('createPetOwnerById')
   async createPetOwner(obj, args, context, info) {
+
     const pet = await this.petsService.findOneById(+args.petID);
     const owner = await this.ownerService.findOneById(+args.ownerID);
 

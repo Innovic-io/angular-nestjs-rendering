@@ -1,6 +1,6 @@
 import { Component } from '@nestjs/common';
 import { IOwner } from '../interfaces/pet.interface';
-import {dummyOwners} from '../dummy.data';
+import { dummyOwners } from '../dummy.data';
 
 @Component()
 // tslint:disable-next-line
