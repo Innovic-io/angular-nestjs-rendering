@@ -2,5 +2,9 @@
   "/graphql": {
     "target": "http://localhost:5400",
     "secure": false
+  },
+  "/graphiql": {
+    "target": "http://localhost:5400",
+    "secure": false
   }
 }

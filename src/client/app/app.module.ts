@@ -12,6 +12,7 @@ import { routes } from './app.routing';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { PingService } from './shared/services/ping.services';
+import { PetsComponent } from './pets/pets.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
 
@@ -19,7 +20,8 @@ const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
   declarations: [
     AppComponent,
     AboutComponent,
-    ContactComponent
+    ContactComponent,
+    PetsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'nestJS' }),

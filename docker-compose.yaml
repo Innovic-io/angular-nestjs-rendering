@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    container_name: "graphql-mongo"
+    command: mongod --port ${MONGO_PORT}
+    volumes:
+      - '~/mongo/graphql:/data/db'
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    restart: 'always'

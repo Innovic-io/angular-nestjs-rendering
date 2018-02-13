@@ -26,6 +26,8 @@ npm install
 
 ```bash
 npm start
+
+docker-compose up
 ```
 
 ### Production
