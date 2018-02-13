@@ -1,6 +1,6 @@
 import { Component } from '@nestjs/common';
-import { IOwner, IPet, IPetSpecies } from '../interfaces/pet.interface';
-import { dummyPets, dummySpecies } from '../dummy.data';
+import {  IPet} from '../interfaces/pet.interface';
+import { dummyPets } from '../dummy.data';
 
 @Component()
 // tslint:disable-next-line
@@ -8,9 +8,10 @@ export class PetsService {
   private readonly pets: IPet[] = dummyPets;
 
   create(pet) {
+
     const count = this.pets.length;
     const toPush = Object.assign({}, pet,
-      {id: count});
+      {id: count, dateAdopted: new Date()});
     this.pets.push(toPush);
 
     return toPush;
@@ -23,8 +24,9 @@ export class PetsService {
     const result = this.findOneById(pet.id);
 
     if (pet.owners) {
-     result.owners.push(pet.owners);
+     Object.assign(result, { owner: pet.owner });
     }
+
     this.pets[index] = Object.assign({}, result, pet);
 
     return result;
@@ -40,18 +42,19 @@ export class PetsService {
   }
 
   findAllPets(): IPet[] {
+
     return this.pets;
   }
 
-  removeOwner(id: number | string, owner: IOwner): IPet {
-     const currentPet = this.findOneById(+id);
+  removeOwner(id: number | string): IPet {
+
      const index = this.pets.findIndex((singlePet) => singlePet.id === id);
 
-     const ownerIndex = currentPet.owners.findIndex((petOwners) => petOwners.id === owner.id);
-     this.pets[index].owners.slice(ownerIndex, 1);
+     Object.assign(this.pets[index], {owner: null});
 
      return this.pets[index];
   }
+
   findOneById(id: number): IPet {
     return this.pets.find(pet => pet.id === id);
   }

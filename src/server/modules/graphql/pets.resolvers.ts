@@ -3,24 +3,19 @@ import { DelegateProperty, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
 import { ApolloError } from 'apollo-client';
 
-import { IOwner, IPet, IPetSpecies } from './interfaces/pet.interface';
+import { IOwner, IPet } from './interfaces/pet.interface';
 import { PetsService } from './services/pets.service';
 import { PetsGuard } from './pets.guard';
 import { OwnerService } from './services/owner.service';
-import { dummySpecies } from './dummy.data';
 
 @Resolver('Pet')
 export class PetsResolvers {
-  private species: IPetSpecies[] = dummySpecies;
 
   constructor(private readonly petsService: PetsService,
-              private readonly ownerService: OwnerService) {
-  }
-
+              private readonly ownerService: OwnerService) {}
   @Query()
   @UseGuards(PetsGuard)
   async getPets() {
-
     return await this.petsService.findAllPets();
   }
 
@@ -45,13 +40,24 @@ export class PetsResolvers {
 
   @Mutation('createPet')
   async createPet(obj, args: IPet, context, info) {
+    let owner;
 
-    if (!args.owners) {
-      const owner = this.ownerService.findOneById(+args.owners);
-      Object.assign(args, { owners: [ owner ] });
+    if (!!args.owner) {
+      owner = await this.ownerService.findOneById(+args.owner);
+      if (!owner) {
+        throw new ApolloError({networkError: new Error('Owner does not exist')});
+      }
     }
 
-    return args; // await this.petsService.create(args);
+    const newPet = await this.petsService.create(args);
+
+    if (owner) {
+
+      Object.assign(owner, { pets: owner.pets.concat(newPet) });
+      await this.ownerService.update(owner);
+    }
+
+    return newPet;
   }
 
   @Mutation('updatePet')
@@ -66,27 +72,18 @@ export class PetsResolvers {
     return await this.petsService.deletePet(+args.id);
   }
 
-  @Mutation('addOwnerToPet')
+  @Mutation('changePetOwner')
   async updatePetsOwner(obj, args, context, info) {
 
-    const updateObject = {
-      id: args.id,
-      owners: args.owners,
-    };
-
-    return await this.petsService.update(updateObject);
+    const currentPet = await this.petsService.findOneById(args.petID);
+    this.ownerService.changeOwner(args.owner, currentPet);
+    return await this.petsService.update(args);
   }
 
   @Mutation('removeOwnerFromPet')
   async removeOwnerFromPet(obj, args, context, info) {
 
-    const owner = await this.ownerService.findOneById(args.owners.id);
-    if (!owner) {
-
-      throw new ApolloError({ networkError: Error('owner not exist') });
-    }
-
-    return await this.petsService.removeOwner(args.id, owner);
+    return await this.petsService.removeOwner(args.id);
   }
 
   @Mutation('createOwner')

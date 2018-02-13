@@ -29,7 +29,7 @@ describe('graphql resolver', () => {
 
     expect(pets).toEqual(dummyPets);
   });
-/*
+
   it('get single Pet', async () => {
 
     const singlePet = await petsResolvers.findOnePetById({id: 0});
@@ -62,5 +62,4 @@ describe('graphql resolver', () => {
     expect(deletedPet).toEqual(petToUpdate);
     expect(dummyPets.length).toBe(numberOfPets - 1);
   });
-  */
 });

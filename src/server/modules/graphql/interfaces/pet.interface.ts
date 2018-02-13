@@ -3,12 +3,15 @@ export interface IPet {
   readonly name: string;
   readonly age: number;
   readonly species: IPetSpecies;
-  readonly owners?: IOwner[];
+  readonly owner?: number;
+  readonly dateAdopted: Date;
 }
 
+export enum SpeciesTypeEnum { BIRD, MAMMAL, BUG, FISH, }
 export interface  IPetSpecies {
-  readonly id?: number;
   readonly speciesName: string;
+  readonly speciesFamily?: string;
+  readonly speciesType: SpeciesTypeEnum;
 }
 
 export interface  IOwner {

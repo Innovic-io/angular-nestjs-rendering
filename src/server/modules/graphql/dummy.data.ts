@@ -1,4 +1,4 @@
-import { IOwner, IPet, IPetSpecies } from './interfaces/pet.interface';
+import { IOwner, IPet, IPetSpecies, SpeciesTypeEnum, } from './interfaces/pet.interface';
 
 export const dummyOwners: IOwner[] = [
   {
@@ -7,26 +7,18 @@ export const dummyOwners: IOwner[] = [
     last_name: 'Visnjic',
     email: 'N/A',
     mobile: 'N/A',
+    pets: [],
   },
   {
-    id: 0,
+    id: 1,
     first_name: 'Milan',
     last_name: 'Milanic',
     email: 'milan@milanic.com',
     mobile: 'N/A',
+    pets: [],
   },
 ];
 
-export const dummySpecies: IPetSpecies[] = [{
-  id: 0,
-  speciesName: 'cat',
-}];
+export const dummySpecies: IPetSpecies[] = [{ speciesName: 'cat', speciesType: SpeciesTypeEnum.MAMMAL }];
 
-export const dummyPets: IPet[] = [
-  { id: 0,
-    name: 'Tom',
-    age: 5,
-    species: dummySpecies[0],
-    owners: [dummyOwners[0]],
-  },
-];
+export const dummyPets: IPet[] = [];

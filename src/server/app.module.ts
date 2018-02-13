@@ -20,8 +20,7 @@ import { ApiModule } from './modules/api/api.module';
   ],
 })
 export class ApplicationModule {
-  constructor(private readonly graphQLFactory: GraphQLFactory) {
-  }
+  constructor(private readonly graphQLFactory: GraphQLFactory) {}
 
   configure(consumer: MiddlewaresConsumer) {
     const schema = this.createSchema();

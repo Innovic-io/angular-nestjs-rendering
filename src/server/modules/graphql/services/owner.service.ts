@@ -1,5 +1,5 @@
 import { Component } from '@nestjs/common';
-import { IOwner } from '../interfaces/pet.interface';
+import { IOwner, IPet } from '../interfaces/pet.interface';
 import { dummyOwners } from '../dummy.data';
 
 @Component()
@@ -31,6 +31,17 @@ export class OwnerService {
     return result;
   }
 
+  changeOwner(newOwnerID: number, pet: IPet) {
+    const oldOwner = this.findOneById(pet.owner);
+    const newOwner = this.findOneById(newOwnerID);
+
+    oldOwner.pets.splice(
+      oldOwner.pets.findIndex((singlePet) =>
+        singlePet.id === pet.id),
+      1);
+    newOwner.pets.push(pet);
+    return true;
+  }
   findAll(): IOwner[] {
     return this.owners;
   }
