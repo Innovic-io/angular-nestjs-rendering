@@ -44,3 +44,67 @@ npm run build:universal
 
 npm run serve:universal
 ```
+
+###Working examples
+ get all pets
+ ```
+ {
+   getPets{
+    _id
+    name
+    species { speciesName }
+  }
+}
+```
+
+create single Pet
+```
+mutation {
+     createPet(name: "Rex", 
+       species: { speciesName: "dog", speciesType: MAMMAL }) {
+       _id
+       name
+       species { speciesName }
+     }
+   }
+```
+
+Create Owner
+```
+mutation {
+   createOwner(
+    first_name: "Milan", 
+  	last_name: "Milanic",
+    mobile: "066/422-22"
+  ) {
+    first_name
+    mobile
+    email  
+  } 
+}
+
+```
+
+Change Pet Owner
+```
+mutation {
+   changePetOwner(petID: {{PetID}}, owner: {{ownerID}}){
+    _id
+    name
+    species { speciesName }
+    owner
+  }
+}
+```
+Delete Pet
+```
+ mutation {
+   deletePet(
+    id: {{PetID}} ) {
+    _id
+    name
+    species { speciesName, speciesFamily }
+    owner
+  }
+}
+```

@@ -1,52 +1,81 @@
-import { Component } from '@nestjs/common';
+import { Component, Inject } from '@nestjs/common';
+
 import { IOwner, IPet } from '../interfaces/pet.interface';
-import { dummyOwners } from '../dummy.data';
+import { DATABASE_TOKEN } from '../../database/database.constants';
+import { IDatabase } from '../../database/interfaces/database.interface';
+import { transferId } from './service.helper';
 
 @Component()
 // tslint:disable-next-line
 export class OwnerService {
-  private readonly owners: IOwner[] = dummyOwners;
 
-  create(owners: IOwner) {
+  private readonly collectionName = 'owners';
+  constructor(@Inject(DATABASE_TOKEN) private readonly dbService: IDatabase) {}
 
-    const count = this.owners.length;
-    const toPush = Object.assign({}, owners,
+  async create(owner) {
+
+    const toPush = Object.assign({}, owner,
       {
-        id: count,
-        email: owners.email || 'N/A',
-        mobile: owners.mobile || 'N/A',
+        email: owner.email || 'N/A',
+        mobile: owner.mobile || 'N/A',
+        pets: [],
       });
-    this.owners.push(toPush);
-    return toPush;
+
+    const op = await this.dbService.collection(this.collectionName).insertOne(toPush);
+
+    const [ addedOwner ] = op.ops;
+
+    return addedOwner;
   }
 
-  update(owner) {
-    owner.id = +owner.id;
+  async update(owner): Promise<IOwner> {
 
-    const index = this.owners.findIndex((oneOwner) => oneOwner.id === owner.id);
-    const result = this.findOneById(owner.id);
+    await this.dbService
+      .collection(this.collectionName)
+      .findOneAndUpdate({_id: transferId(owner._id)}, owner);
 
-    this.owners[index] = Object.assign({}, result, owner);
-
-    return result;
+    return owner;
   }
 
-  changeOwner(newOwnerID: number, pet: IPet) {
-    const oldOwner = this.findOneById(pet.owner);
-    const newOwner = this.findOneById(newOwnerID);
+  async changeOwner(newOwnerID: string, pet: IPet) {
+    const oldOwner = await this.findOneById(pet.owner);
+    const newOwner = await this.findOneById(newOwnerID);
 
     oldOwner.pets.splice(
       oldOwner.pets.findIndex((singlePet) =>
         singlePet.id === pet.id),
       1);
+    await this.dbService
+      .collection(this.collectionName)
+      .findOneAndUpdate({_id: oldOwner.id}, oldOwner);
+
     newOwner.pets.push(pet);
+    await this.dbService
+      .collection(this.collectionName)
+      .findOneAndUpdate({_id: newOwner.id}, newOwner);
+
     return true;
   }
-  findAll(): IOwner[] {
-    return this.owners;
+
+  async deleteOwner(id: string): Promise<IOwner> {
+
+    const currentPet = await this.findOneById(id);
+
+    await  this.dbService
+      .collection(this.collectionName)
+      .findOneAndDelete({_id: transferId(id)});
+    return currentPet;
   }
 
-  findOneById(id: number): IOwner {
-    return this.owners.find(owners => owners.id === id);
+  async findAll() {
+
+    return await this.dbService.collection<IOwner[]>(this.collectionName).find({}).toArray();
+  }
+
+  async findOneById(id: string): Promise<IOwner> {
+
+    return await this.dbService
+      .collection<IOwner>(this.collectionName)
+      .findOne({ _id: transferId(id) });
   }
 }

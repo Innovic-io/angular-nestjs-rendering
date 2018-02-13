@@ -26,16 +26,16 @@ export class PetsResolvers {
     return await this.ownerService.findAll();
   }
 
-  @Query('pet')
-  async findOnePetById(query: { id: string | number }, @Req() request?) {
+  @Query('getPetById')
+  async findOnePetById(obj, args, context, info) {
 
-    return await this.petsService.findOneById(+query.id);
+    return await this.petsService.findOneById(args.id);
   }
 
   @Query('owner')
-  async findOneOwnerById(query: { id: string | number }, @Req() request?) {
+  async findOneOwnerById(obj, args, context, info) {
 
-    return await this.ownerService.findOneById(+query.id);
+    return await this.ownerService.findOneById(args.id);
   }
 
   @Mutation('createPet')
@@ -43,7 +43,9 @@ export class PetsResolvers {
     let owner;
 
     if (!!args.owner) {
-      owner = await this.ownerService.findOneById(+args.owner);
+
+      owner = await this.ownerService.findOneById(args.owner);
+
       if (!owner) {
         throw new ApolloError({networkError: new Error('Owner does not exist')});
       }
@@ -63,13 +65,19 @@ export class PetsResolvers {
   @Mutation('updatePet')
   async updatePet(obj, args: IPet, context, info) {
 
+    if (!args.id) {
+      throw new ApolloError({errorMessage: 'Bad id sent'});
+    }
+
     return await this.petsService.update(args);
   }
 
   @Mutation('deletePet')
   async deletePet(obj, args, context, info) {
 
-    return await this.petsService.deletePet(+args.id);
+    await this.petsService.removeOwner(args.id);
+
+    return await this.petsService.deletePet(args.id);
   }
 
   @Mutation('changePetOwner')
@@ -77,7 +85,8 @@ export class PetsResolvers {
 
     const currentPet = await this.petsService.findOneById(args.petID);
     this.ownerService.changeOwner(args.owner, currentPet);
-    return await this.petsService.update(args);
+    Object.assign(currentPet, { owner: args.owner});
+    return await this.petsService.update(currentPet);
   }
 
   @Mutation('removeOwnerFromPet')

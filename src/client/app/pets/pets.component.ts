@@ -13,7 +13,7 @@ export class PetsComponent implements OnInit {
   // tslint:disable
   private updateComment = gql`
     mutation createPet($name: String!) {
-      createPet( name: $name, species: { speciesName: "dog", speciesFamily: "horse", speciesType: BIRD }, age: 8, owner: 0){ age, name, __typename }
+      createPet( name: $name, species: { speciesName: "dog", speciesFamily: "horse", speciesType: BIRD }, age: 8){ age, name, __typename }
     }
 `;
   // tslint:enable

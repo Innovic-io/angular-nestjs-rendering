@@ -1,13 +1,13 @@
 export interface IPet {
-  readonly id?: number;
+  readonly id?: string;
   readonly name: string;
   readonly age: number;
   readonly species: IPetSpecies;
-  readonly owner?: number;
+  readonly owner?: string;
   readonly dateAdopted: Date;
 }
 
-export enum SpeciesTypeEnum { BIRD, MAMMAL, BUG, FISH, }
+export enum SpeciesTypeEnum { BIRD, MAMMAL, BUG, FISH }
 export interface  IPetSpecies {
   readonly speciesName: string;
   readonly speciesFamily?: string;
