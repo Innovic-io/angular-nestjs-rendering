@@ -13,6 +13,7 @@ export class PetsResolvers {
 
   constructor(private readonly petsService: PetsService,
               private readonly ownerService: OwnerService) {}
+
   @Query()
   @UseGuards(PetsGuard)
   async getPets() {
@@ -22,50 +23,33 @@ export class PetsResolvers {
   @Query()
   @UseGuards(PetsGuard)
   async getOwners() {
-
     return await this.ownerService.findAll();
   }
 
   @Query('getPetById')
-  async findOnePetById(obj, args, context, info) {
+  async findOnePetById(obj, { id }, context, info) {
 
-    return await this.petsService.findOneById(args.id);
+    return await this.petsService.findOneById(id);
   }
 
   @Query('owner')
-  async findOneOwnerById(obj, args, context, info) {
+  async findOneOwnerById(obj, { id }, context, info) {
 
-    return await this.ownerService.findOneById(args.id);
+    return await this.ownerService.findOneById(id);
   }
 
   @Mutation('createPet')
-  async createPet(obj, args: IPet, context, info) {
-    let owner;
+  async createPet(obj, pet: IPet, context, info) {
 
-    if (!!args.owner) {
+    const owner = await this.ownerService.addPet(pet);
 
-      owner = await this.ownerService.findOneById(args.owner);
-
-      if (!owner) {
-        throw new ApolloError({networkError: new Error('Owner does not exist')});
-      }
-    }
-
-    const newPet = await this.petsService.create(args);
-
-    if (owner) {
-
-      Object.assign(owner, { pets: owner.pets.concat(newPet) });
-      await this.ownerService.update(owner);
-    }
-
-    return newPet;
+    return owner.value;
   }
 
   @Mutation('updatePet')
   async updatePet(obj, args: IPet, context, info) {
 
-    if (!args.id) {
+    if (!args._id) {
       throw new ApolloError({errorMessage: 'Bad id sent'});
     }
 
@@ -81,12 +65,11 @@ export class PetsResolvers {
   }
 
   @Mutation('changePetOwner')
-  async updatePetsOwner(obj, args, context, info) {
+  async updatePetsOwner(obj, { petID, owner }, context, info) {
 
-    const currentPet = await this.petsService.findOneById(args.petID);
-    this.ownerService.changeOwner(args.owner, currentPet);
-    Object.assign(currentPet, { owner: args.owner});
-    return await this.petsService.update(currentPet);
+    const newOwner = await this.ownerService.changeOwner(petID, owner);
+
+    return newOwner.value;
   }
 
   @Mutation('removeOwnerFromPet')

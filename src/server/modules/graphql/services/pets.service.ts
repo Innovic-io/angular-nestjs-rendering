@@ -3,7 +3,7 @@ import { Component, Inject } from '@nestjs/common';
 import {  IPet} from '../interfaces/pet.interface';
 import { DATABASE_TOKEN } from '../../database/database.constants';
 import { IDatabase } from '../../database/interfaces/database.interface';
-import { transferId } from './service.helper';
+import { createObjectID } from './service.helper';
 
 @Component()
 // tslint:disable-next-line
@@ -28,7 +28,7 @@ export class PetsService {
 
    await this.dbService
       .collection(this.collectionName)
-      .findOneAndUpdate({_id: transferId(pet._id)}, pet);
+      .findOneAndUpdate({_id: createObjectID(pet._id)}, pet);
 
    return pet;
   }
@@ -39,7 +39,8 @@ export class PetsService {
 
     await  this.dbService
       .collection(this.collectionName)
-      .findOneAndDelete({_id: transferId(id)});
+      .findOneAndDelete({_id: createObjectID(id)});
+
     return currentPet;
   }
 
@@ -60,6 +61,6 @@ export class PetsService {
 
     return await this.dbService
       .collection<IPet>(this.collectionName)
-      .findOne({ _id: transferId(id) });
+      .findOne({ _id: createObjectID(id) });
   }
 }

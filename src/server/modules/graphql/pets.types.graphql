@@ -15,13 +15,13 @@ input PetSpeciesInput {
 
 type Mutation {
   createPet(name: String!, species: PetSpeciesInput!,
-    age: Int, owner: ID): Pet
+    age: Int, owner: ID!): Owner
   updatePet(_id: ID!, name: String,
     species: PetSpeciesInput, age: Int,
     owner: ID
   ): Pet
   removeOwnerFromPet(petID: ID!): Pet
-  changePetOwner(petID: ID!, owner: ID!): Pet
+  changePetOwner(petID: ID!, owner: ID!): Owner
   deletePet(id: ID!): Pet
 
   createOwner(first_name: String!,
