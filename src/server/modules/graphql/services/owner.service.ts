@@ -44,7 +44,7 @@ export class OwnerService {
 
   async changeOwner(petID: string, ownerID: string) {
 
-    const oldOwner = await this.collection.findOne({ 'pets._id': createObjectID(petID) });
+    const oldOwner = await this.findByPetId(petID);
 
     const [pet] = oldOwner.pets;
 
@@ -66,39 +66,36 @@ export class OwnerService {
     delete pet.owner;
 
     Object.assign(pet, {
-      _id: new ObjectID()
+      _id: new ObjectID(),
     });
 
     return this.addPetToOwner(owner, pet);
-
   }
 
   private async addPetToOwner(owner: string, pet: IPet) {
 
     return this.collection.findOneAndUpdate({ _id: createObjectID(owner) }, {
-      '$addToSet': { pets: pet },
+      $addToSet: { pets: pet },
     }, { returnOriginal: false });
   }
 
   private async removeFromOwner(owner: string, pet: IPet) {
 
     return this.collection.findOneAndUpdate({ _id: createObjectID(owner) }, {
-      '$pull': { pets: pet },
+      $pull: { pets: pet },
     });
   }
 
+  async deleteOwner(id: string) {
 
-  async deleteOwner(id: string): Promise<IOwner> {
+    const deletedOwner = await this.collection.findOneAndDelete({ _id: createObjectID(id) });
 
-    const currentPet = await this.findOneById(id);
-
-    await  this.collection.findOneAndDelete({ _id: createObjectID(id) });
-    return currentPet;
+    return deletedOwner.value;
   }
 
   async findAll() {
 
-    return await this.dbService.collection<IOwner[]>(this.collectionName).find({}).toArray();
+    return await this.collection.find({}).toArray();
   }
 
   async findOneById(id: string): Promise<IOwner> {
@@ -108,5 +105,50 @@ export class OwnerService {
     }
 
     return null;
+  }
+
+  async findByPetId(petID: string) {
+
+    return await this.collection.findOne({ 'pets._id': createObjectID(petID) },
+      {
+        projection: {
+          '_id': 1,
+          'pets.$': 1,
+        },
+      });
+  }
+
+  async deletePet(petId: string) {
+
+    const petOwner = await this.findByPetId(petId);
+    if (!petOwner) {
+      return null;
+    }
+    const [ petToRemove ] = petOwner.pets;
+
+    await this.removeFromOwner(petOwner._id, petToRemove);
+
+    return petToRemove;
+  }
+
+  async updatePet(pet) {
+
+    const petForUpdate =
+      Object.assign({}, ...Object.keys(pet)
+        .filter((oneKey) => oneKey !== '_id')
+        .map((oneKey) => {
+
+          const name = `pets.$.${oneKey}`;
+
+          return { [ name ]: pet[oneKey] };
+        }),
+      );
+
+    const result = await this.collection.findOneAndUpdate(
+      { 'pets._id': createObjectID(pet._id) },
+      {$set : petForUpdate },
+      );
+
+    return result.value;
   }
 }

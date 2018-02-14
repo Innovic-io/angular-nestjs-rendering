@@ -60,11 +60,15 @@ npm run serve:universal
 create single Pet
 ```
 mutation {
-     createPet(name: "Rex", 
-       species: { speciesName: "dog", speciesType: MAMMAL }) {
-       _id
-       name
-       species { speciesName }
+     createPet(name: "Third name", 
+       species: { speciesName: "dog", speciesType:BIRD },
+    owner: "5a843c499d0b3e1b7aad0342") {
+        _id
+       first_name
+       pets {
+         name
+         age
+       }
      }
    }
 ```
@@ -92,7 +96,6 @@ mutation {
     _id
     name
     species { speciesName }
-    owner
   }
 }
 ```
@@ -104,7 +107,28 @@ Delete Pet
     _id
     name
     species { speciesName, speciesFamily }
-    owner
+  }
+}
+```
+
+Delete Owner
+```
+ mutation {
+   deleteOwner(
+    id: "{{ownerID}}" ) {
+     pets {
+          _id
+          name
+          species {
+            speciesFamily
+            speciesType
+            speciesName
+          } 
+          age
+          
+        }
+        last_name
+        _id
   }
 }
 ```

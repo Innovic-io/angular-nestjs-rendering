@@ -1,8 +1,7 @@
 type Query {
-  getPets: [Pet]
-  getPetById(id: ID!): Pet
-  owner(id: ID!): Owner
+  getOwnerById(id: ID!): Owner
   getOwners: [Owner]
+  getPetById(id: ID!): Pet
 }
 
 scalar DateTime
@@ -17,11 +16,10 @@ type Mutation {
   createPet(name: String!, species: PetSpeciesInput!,
     age: Int, owner: ID!): Owner
   updatePet(_id: ID!, name: String,
-    species: PetSpeciesInput, age: Int,
-    owner: ID
-  ): Pet
-  removeOwnerFromPet(petID: ID!): Pet
-  changePetOwner(petID: ID!, owner: ID!): Owner
+    species: PetSpeciesInput, age: Int
+  ): Owner
+
+  updatePetsOwner(petID: ID!, owner: ID!): Owner
   deletePet(id: ID!): Pet
 
   createOwner(first_name: String!,
@@ -30,6 +28,7 @@ type Mutation {
   updateOwner(id: ID!, first_name: String,
   last_name: String, mobile: String,
   email: String): Owner
+  deleteOwner(id: ID!): Owner
 }
 
 type PetSpecies {
@@ -52,8 +51,6 @@ type Pet {
   name: String
   species: PetSpecies
   age: Int
-  owner: ID
-  dateAdopted: String!
 }
 
 enum SpeciesTypeEnum {
@@ -61,4 +58,8 @@ enum SpeciesTypeEnum {
   MAMMAL
   BUG
   FISH
+}
+
+type Subscription {
+  petAdded( pet: Pet! ): Owner
 }

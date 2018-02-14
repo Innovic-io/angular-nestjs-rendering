@@ -1,24 +1,15 @@
-import { Req, UseGuards } from '@nestjs/common';
-import { DelegateProperty, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { DelegateProperty, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
-import { ApolloError } from 'apollo-client';
 
 import { IOwner, IPet } from './interfaces/pet.interface';
-import { PetsService } from './services/pets.service';
 import { PetsGuard } from './pets.guard';
 import { OwnerService } from './services/owner.service';
 
 @Resolver('Pet')
 export class PetsResolvers {
 
-  constructor(private readonly petsService: PetsService,
-              private readonly ownerService: OwnerService) {}
-
-  @Query()
-  @UseGuards(PetsGuard)
-  async getPets() {
-    return await this.petsService.findAllPets();
-  }
+  constructor(private readonly ownerService: OwnerService) {}
 
   @Query()
   @UseGuards(PetsGuard)
@@ -26,19 +17,26 @@ export class PetsResolvers {
     return await this.ownerService.findAll();
   }
 
-  @Query('getPetById')
-  async findOnePetById(obj, { id }, context, info) {
+  @Query()
+  async getPetById(obj, { id }, context, info) {
 
-    return await this.petsService.findOneById(id);
+    const result = await this.ownerService.findByPetId(id);
+
+    if (!result) {
+      return null;
+    }
+    const [ pet ] = result.pets;
+
+    return pet;
   }
 
-  @Query('owner')
-  async findOneOwnerById(obj, { id }, context, info) {
+  @Query()
+  async getOwnerById(obj, { id }, context, info) {
 
     return await this.ownerService.findOneById(id);
   }
 
-  @Mutation('createPet')
+  @Mutation()
   async createPet(obj, pet: IPet, context, info) {
 
     const owner = await this.ownerService.addPet(pet);
@@ -46,25 +44,13 @@ export class PetsResolvers {
     return owner.value;
   }
 
-  @Mutation('updatePet')
-  async updatePet(obj, args: IPet, context, info) {
+  @Mutation()
+  async updatePet(obj, pet: IPet, context, info) {
 
-    if (!args._id) {
-      throw new ApolloError({errorMessage: 'Bad id sent'});
-    }
-
-    return await this.petsService.update(args);
+    return await this.ownerService.updatePet(pet);
   }
 
-  @Mutation('deletePet')
-  async deletePet(obj, args, context, info) {
-
-    await this.petsService.removeOwner(args.id);
-
-    return await this.petsService.deletePet(args.id);
-  }
-
-  @Mutation('changePetOwner')
+  @Mutation()
   async updatePetsOwner(obj, { petID, owner }, context, info) {
 
     const newOwner = await this.ownerService.changeOwner(petID, owner);
@@ -72,24 +58,39 @@ export class PetsResolvers {
     return newOwner.value;
   }
 
-  @Mutation('removeOwnerFromPet')
-  async removeOwnerFromPet(obj, args, context, info) {
+  @Mutation()
+  async deletePet(obj, { id }, context, info): Promise<IPet> {
 
-    return await this.petsService.removeOwner(args.id);
+    return await this.ownerService.deletePet(id);
   }
 
-  @Mutation('createOwner')
+  @Mutation()
   async createOwner(obj, args: IOwner, context, info) {
 
     return await this.ownerService.create(args);
   }
 
-  @Mutation('updateOwner')
+  @Mutation()
   async updateOwner(obj, args: IOwner, context, info) {
 
     return await this.ownerService.update(args);
   }
 
+  @Mutation()
+  async deleteOwner(obj, { id }, context, info) {
+
+    return await this.ownerService.deleteOwner(id);
+  }
+
+  // @TODO make one subscription
+  @Subscription()
+  async petAdded() {
+    return {
+      subscribe: () => {}
+    };
+  }
+
+  // TODO find usefull example and implement it
   @DelegateProperty('human')
   findHumansById() {
     return (mergeInfo: MergeInfo) => ({
