@@ -10,19 +10,11 @@ import { Observable } from 'rxjs/Observable';
 })
 export class PetsComponent implements OnInit {
 
-  // tslint:disable
-  private updateComment = gql`
-    mutation createPet($name: String!) {
-      createPet( name: $name, species: { speciesName: "dog", speciesFamily: "horse", speciesType: BIRD }, age: 8,owner: "5a85393458f4201d3275c111") {   _id
-        first_name
-        pets {
-          name
-          age
-        }
-        __typename }
-    }
+  // tslint:disable-next-line
+  private updateComment = gql`mutation createPet($name: String!) 
+{ createPet( name: $name, species: { speciesName: "dog", speciesFamily: "horse", speciesType: BIRD }, age: 8,owner: "5a85393458f4201d3275c111")
+{ _id first_name pets { name age } account { id amount } chirps { id text } __typename }
 `;
-  // tslint:enable
 
   result$: Observable<any>;
 

@@ -5,7 +5,6 @@ import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
 import { PetsModule } from './modules/pets/pets.module';
-import { ApiModule } from './modules/api/api.module';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
 import { linkTypeDefs } from './link.typedefs';
 import { ChirpsModule } from './modules/chirps/chirps.module';
@@ -17,7 +16,6 @@ import { ChirpsModule } from './modules/chirps/chirps.module';
     ChirpsModule,
   //  SubscriptionsModule.forRoot(),
     GraphQLModule,
-    ApiModule,
   ],
   controllers: [],
   components: [

@@ -1,6 +1,5 @@
 import { Component, Inject } from '@nestjs/common';
 import { Collection } from 'mongodb';
-import { ObjectID } from 'bson';
 
 import { IOwner, IPet } from '../interfaces/pet.interface';
 import { DATABASE_TOKEN } from '../../database/database.constants';
@@ -66,7 +65,7 @@ export class OwnerService {
     delete pet.owner;
 
     Object.assign(pet, {
-      _id: new ObjectID(),
+      _id: createObjectID(),
     });
 
     return this.addPetToOwner(owner, pet);
