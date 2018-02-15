@@ -133,16 +133,15 @@ export class OwnerService {
 
   async updatePet(pet) {
 
-    const petForUpdate =
-      Object.assign({}, ...Object.keys(pet)
+    const petForUpdate = Object.assign({}, ...Object.keys(pet)
         .filter((oneKey) => oneKey !== '_id')
         .map((oneKey) => {
 
           const name = `pets.$.${oneKey}`;
 
-          return { [ name ]: pet[oneKey] };
+          return { [ name ]: pet[ oneKey ] };
         }),
-      );
+    );
 
     const result = await this.collection.findOneAndUpdate(
       { 'pets._id': createObjectID(pet._id) },

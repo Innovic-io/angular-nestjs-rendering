@@ -1,0 +1,10 @@
+type Chirp {
+  id: ID
+  text: String
+  ownerId: ID
+}
+
+type Query {
+  chirpById(id: ID!): Chirp
+  chirpsByOwnerId(ownerId: ID!): [Chirp]
+}

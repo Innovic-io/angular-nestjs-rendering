@@ -1,5 +1,7 @@
+import { ObjectID } from 'bson';
+
 export interface IPet {
-  _id: string;
+  _id: ObjectID;
   name: string;
   age: number;
   species: IPetSpecies;
@@ -15,10 +17,16 @@ export interface  IPetSpecies {
 }
 
 export interface  IOwner {
-  readonly id?: number;
+  readonly id?: ObjectID;
   readonly first_name: string;
   readonly last_name: string;
   readonly mobile?: string;
   readonly email?: string;
   readonly pets?: IPet[];
+}
+
+export interface IAccount {
+  readonly id: number;
+  readonly amount: number;
+  readonly ownerId: ObjectID;
 }

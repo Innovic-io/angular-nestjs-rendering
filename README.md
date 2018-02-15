@@ -46,31 +46,20 @@ npm run serve:universal
 ```
 
 ###Working examples
- get all pets
- ```
- {
-   getPets{
-    _id
-    name
-    species { speciesName }
-  }
-}
-```
-
 create single Pet
 ```
 mutation {
-     createPet(name: "Third name", 
-       species: { speciesName: "dog", speciesType:BIRD },
-    owner: "5a843c499d0b3e1b7aad0342") {
-        _id
-       first_name
-       pets {
-         name
-         age
-       }
+   createPet(name: "Third name", 
+     species: { speciesName: "dog", speciesType:BIRD },
+     owner: "5a843c499d0b3e1b7aad0342") {
+      _id
+     first_name
+     pets {
+       name
+       age
      }
    }
+ }
 ```
 
 Create Owner
@@ -116,19 +105,19 @@ Delete Owner
  mutation {
    deleteOwner(
     id: "{{ownerID}}" ) {
-     pets {
-          _id
-          name
-          species {
-            speciesFamily
-            speciesType
-            speciesName
-          } 
-          age
-          
-        }
-        last_name
+      pets {
         _id
+        name
+        species {
+          speciesFamily
+          speciesType
+          speciesName
+        } 
+        age
+        
+      }
+      last_name
+      _id
   }
 }
 ```

@@ -4,14 +4,6 @@ type Query {
   getPetById(id: ID!): Pet
 }
 
-scalar DateTime
-
-input PetSpeciesInput {
-  speciesName: String!
-  speciesFamily: String
-  speciesType: SpeciesTypeEnum!
-}
-
 type Mutation {
   createPet(name: String!, species: PetSpeciesInput!,
     age: Int, owner: ID!): Owner
@@ -26,10 +18,17 @@ type Mutation {
     last_name: String!, mobile: String,
     email: String ): Owner
   updateOwner(id: ID!, first_name: String,
-  last_name: String, mobile: String,
-  email: String): Owner
+    last_name: String, mobile: String,
+    email: String): Owner
   deleteOwner(id: ID!): Owner
 }
+
+input PetSpeciesInput {
+  speciesName: String!
+  speciesFamily: String
+  speciesType: SpeciesTypeEnum!
+}
+
 
 type PetSpecies {
   speciesName: String!
@@ -44,6 +43,7 @@ type Owner {
   mobile: String
   email: String
   pets: [Pet]
+  account: [Account]
 }
 
 type Pet {
@@ -51,6 +51,12 @@ type Pet {
   name: String
   species: PetSpecies
   age: Int
+  dateAdopted: String
+}
+
+type Account {
+  id: Int
+  amount: Int
 }
 
 enum SpeciesTypeEnum {
@@ -61,5 +67,7 @@ enum SpeciesTypeEnum {
 }
 
 type Subscription {
-  petAdded( pet: Pet! ): Owner
+  dateChanged(something: String): Owner
 }
+
+scalar DateTime
