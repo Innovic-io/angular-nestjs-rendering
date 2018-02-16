@@ -13,7 +13,7 @@ export class PetsComponent implements OnInit {
   // tslint:disable-next-line
   private updateComment = gql`mutation createPet($name: String!) 
 { createPet( name: $name, species: { speciesName: "dog", speciesFamily: "horse", speciesType: BIRD }, age: 8,owner: "5a85393458f4201d3275c111")
-{ _id first_name pets { name age } account { id amount } chirps { id text } __typename } }
+{ _id first_name pets { name age } account { _id amount } chirps { _id text } __typename } }
 `;
 
   result$: Observable<any>;
@@ -47,7 +47,7 @@ export class PetsComponent implements OnInit {
   getOwnerById(ownerId?: string) {
 
     this.result$ = this.apollo.query({
-      query: gql`{ getOwnerById(id: "${ownerId}") { first_name last_name mobile email account { amount } } }`,
+      query: gql`{ getOwnerById(_id: "${ownerId}") { first_name last_name mobile email account { amount } } }`,
       errorPolicy: 'all'
     });
   }

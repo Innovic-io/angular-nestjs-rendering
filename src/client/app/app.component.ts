@@ -23,19 +23,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
-    this.pets$ = this.apollo.query({query: gql`{ getOwners {  _id
-        first_name
-        last_name
-        pets {
-          name
-          age
-          _id
-        }
-        email
-        account {
-          id
-          amount
-        }  } }`});
+    this.pets$ = this.apollo.query({query: gql`{ getOwners {
+        _id first_name last_name pets { name age _id } email
+        account { _id amount }  } }`});
 
     this.pongMessage$ = this.pingService.getPong();
   }

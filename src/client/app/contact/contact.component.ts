@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -11,11 +10,8 @@ export class ContactComponent implements OnInit {
 
   responseFromApi$: Observable<any>;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor() { }
 
-  ngOnInit() {
-
-    this.responseFromApi$ = this.httpClient.get<any>('/api/hello');
-  }
+  ngOnInit() {}
 
 }
