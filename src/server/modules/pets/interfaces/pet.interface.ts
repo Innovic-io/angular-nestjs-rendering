@@ -17,7 +17,7 @@ export interface  IPetSpecies {
 }
 
 export interface  IOwner {
-  readonly id?: ObjectID;
+  readonly _id?: ObjectID;
   readonly first_name: string;
   readonly last_name: string;
   readonly mobile?: string;
@@ -26,7 +26,7 @@ export interface  IOwner {
 }
 
 export interface IAccount {
-  readonly id: number;
+  readonly _id: ObjectID;
   readonly amount: number;
   readonly ownerId: ObjectID;
 }

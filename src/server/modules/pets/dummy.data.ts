@@ -7,22 +7,22 @@ export const dummyAccount: IAccount[] =
   [
     {
       ownerId: createObjectID('5a85393458f4201d3275c111'),
-      id: 1,
+      _id: createObjectID('5a85393458f4201d3275c222'),
       amount: 2500,
     },
     {
       ownerId: createObjectID('5a8539b658f4201d3275c112'),
-      id: 2,
+      _id: createObjectID('5a85393458f4201d3275c223'),
       amount: 2100,
     },
     {
       ownerId: createObjectID('5a8539b658f4201d3275c112'),
-      id: 3,
+      _id: createObjectID('5a85393458f4201d3275c224'),
       amount: 2300,
     },
     {
       ownerId: createObjectID('5a8539b658f4201d3275c112'),
-      id: 4,
+      _id: createObjectID('5a85393458f4201d3275c225'),
       amount: 9500,
     },
 
@@ -30,12 +30,12 @@ export const dummyAccount: IAccount[] =
 
 export const dummyChirps: IChirps[] = [
   {
-    id: 0,
+    _id: 0,
     text: 'some text given',
     ownerId: createObjectID('5a85574b847a38444d536a5e'),
   },
   {
-    id: 1,
+    _id: 1,
     text: 'text given',
     ownerId: createObjectID('5a85574b847a38444d536a5e'),
   },

@@ -13,8 +13,8 @@ export class ChirpsResolver {
   }
 
   @Query()
-  chirpById(parent, { id }, context?, info?) {
+  chirpById(parent, { _id }, context?, info?) {
 
-    return this.chirps.find((single) => single.id === +id);
+    return this.chirps.find((single) => single._id === +_id);
   }
 }

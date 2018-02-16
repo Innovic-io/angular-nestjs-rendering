@@ -10,6 +10,7 @@ import { dummyAccount } from './dummy.data';
 import { ApolloError } from 'apollo-client';
 import { ObjectID } from 'bson';
 import { WRONG_ID_ERROR } from './pets.constants';
+import { createObjectID } from './services/service.helper';
 
 const ownerSubscription = new PubSub();
 
@@ -27,13 +28,13 @@ export class PetsResolvers {
   }
 
   @Query()
-  async getPetById(obj, { id }, context?, info?) {
+  async getPetById(obj, { _id }, context?, info?) {
 
-    if (!ObjectID.isValid(id)) {
+    if (!ObjectID.isValid(_id)) {
       throw new ApolloError(WRONG_ID_ERROR);
     }
 
-    const result = await this.ownerService.findByPetId(id);
+    const result = await this.ownerService.findByPetId(_id);
 
     if (!result) {
       return null;
@@ -44,14 +45,14 @@ export class PetsResolvers {
   }
 
   @Query()
-  async getOwnerById(obj, { id }, context?, info?) {
+  async getOwnerById(obj, { _id }, context?, info?) {
 
-    if (!ObjectID.isValid(id)) {
+    if (!ObjectID.isValid(_id)) {
 
       throw new ApolloError(WRONG_ID_ERROR);
     }
 
-    return await this.ownerService.findOneById(id);
+    return await this.ownerService.findOneById(_id);
   }
 
   /**
@@ -122,20 +123,20 @@ export class PetsResolvers {
    * remove Pet from Owner
    *
    * @param obj
-   * @param {any} id
+   * @param {any} _id
    * @param context?
    * @param info?
    * @returns {Promise<IPet>}
    */
   @Mutation()
-  async deletePet(obj, { id }, context?, info?): Promise<IPet> {
+  async deletePet(obj, { _id }, context?, info?): Promise<IPet> {
 
-    if (!ObjectID.isValid(id)) {
+    if (!ObjectID.isValid(_id)) {
 
       throw new ApolloError(WRONG_ID_ERROR);
     }
 
-    return await this.ownerService.deletePet(id);
+    return await this.ownerService.deletePet(_id);
   }
 
   /**
@@ -165,7 +166,7 @@ export class PetsResolvers {
   @Mutation()
   async updateOwner(obj, args: IOwner, context?, info?) {
 
-    if (!ObjectID.isValid(args.id)) {
+    if (!ObjectID.isValid(args._id)) {
 
       throw new ApolloError(WRONG_ID_ERROR);
     }
@@ -177,20 +178,32 @@ export class PetsResolvers {
    * Delete Owner from DB
    *
    * @param obj
-   * @param {any} id
+   * @param {any} _id
    * @param context?
    * @param info?
    * @returns {Promise<Default | undefined>}
    */
   @Mutation()
-  async deleteOwner(obj, { id }, context?, info?) {
+  async deleteOwner(obj, { _id }, context?, info?) {
 
-    if (!ObjectID.isValid(id)) {
+    if (!ObjectID.isValid(_id)) {
 
       throw new ApolloError(WRONG_ID_ERROR);
     }
 
-    return await this.ownerService.deleteOwner(id);
+    return await this.ownerService.deleteOwner(_id);
+  }
+
+  @Mutation()
+  async addAccountToOwner(obj, { ownerId, amount}) {
+
+    const owner = await this.getOwnerById(obj, {_id: ownerId});
+    console.log(owner);
+    const newBankAccount: IAccount = { _id: createObjectID(), ownerId: owner._id, amount };
+
+    this.bankAccount.push(newBankAccount);
+
+    return newBankAccount;
   }
 
   /**
@@ -227,7 +240,7 @@ export class PetsResolvers {
   @DelegateProperty('chirps')
   findChirpsByUserId() {
     return (mergeInfo: MergeInfo) => ({
-      fragment: `fragment OwnerFragment on Owner { id }`,
+      fragment: `fragment OwnerFragment on Owner { _id }`,
       resolve(parent, args, context?, info?) {
 
         const ownerId = parent._id;

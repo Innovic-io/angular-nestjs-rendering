@@ -1,10 +1,10 @@
 type Chirp {
-  id: ID
+  _id: ID
   text: String
   ownerId: ID
 }
 
 type Query {
-  chirpById(id: ID!): Chirp
+  chirpById(_id: ID!): Chirp
   chirpsByOwnerId(ownerId: ID!): [Chirp]
 }
