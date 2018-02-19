@@ -7,15 +7,22 @@ const parseValue = (value) => {
 
 const serialize = (value) => {
 
-  return value.getTime();
+  return value.toISOString();
 };
 
 const parseLiteral = (ast) => {
 
-  if (ast.kind === Kind.INT) {
-    return parseInt(ast.value, 10); // ast value is always in string format
+  switch (ast.kind) {
+
+    case Kind.INT:
+      return parseInt(ast.value, 10); // ast value is always in string format
+
+    case Kind.STRING:
+      return Date.parse(ast.value);
+
+    default:
+      return null;
   }
-  return null;
 };
 
 const DateTime = new GraphQLScalarType({

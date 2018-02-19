@@ -66,8 +66,11 @@ export class OwnerService {
 
     Object.assign(pet, {
       _id: createObjectID(),
-      dateAdopted: new Date(),
     });
+
+    if (pet.dateAdopted) {
+      pet = { ...pet, dateAdopted: new Date(pet.dateAdopted) };
+    }
 
     return this.addPetToOwner(owner, pet);
   }
