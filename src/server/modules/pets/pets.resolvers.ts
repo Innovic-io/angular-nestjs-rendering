@@ -199,7 +199,7 @@ export class PetsResolvers {
   async addAccountToOwner(obj, { ownerId, amount}) {
 
     const owner = await this.getOwnerById(obj, {_id: ownerId});
-    console.log(owner);
+
     const newBankAccount: IAccount = { _id: createObjectID(), ownerId: owner._id, amount };
 
     this.bankAccount.push(newBankAccount);
@@ -210,8 +210,8 @@ export class PetsResolvers {
   @Mutation()
   async uploadProfilePicture(root, { id, files }, context) {
     // you can now access files parameter from variables
-    console.log('uploadProfilePicture', { id, files });
-    // ...
+    // console.log('uploadProfilePicture', { id, files });
+    return files.toString();
   }
 
   /**
@@ -236,13 +236,10 @@ export class PetsResolvers {
   @Subscription('dateChanged')
   async dateChanged(obj, args, context, info) {
 
-    console.log('args');
-
-    console.log(args);
     return {
 
       subscribe: async () => {
-        console.log(args);
+
         return await ownerSubscription.asyncIterator('dateChanged');
       },
     };

@@ -2,6 +2,8 @@ import { MiddlewaresConsumer, Module, RequestMethod } from '@nestjs/common';
 import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
+import graphqlExpressUpload from 'graphql-server-express-upload';
+import * as multer from 'multer';
 
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
@@ -9,6 +11,11 @@ import { PetsModule } from './modules/pets/pets.module';
 import { linkTypeDefs } from './link.typedefs';
 import { ChirpsModule } from './modules/chirps/chirps.module';
 import { ScalarResolver } from '../shared/scalar.resoler';
+import { FILES_FOLDER_PATH } from '../shared/constants';
+
+const upload = multer({
+  dest: FILES_FOLDER_PATH,
+});
 
 @Module({
   imports: [
@@ -33,9 +40,13 @@ export class ApplicationModule {
    // this.subscriptionsModule.createSubscriptionServer(schema);
 
     consumer
-      .apply(graphiqlExpress({ endpointURL: '/graphql',
-//          subscriptionsEndpoint: `ws://localhost:5401/subscriptions`
-        }))
+      .apply([
+        upload,
+        graphqlExpressUpload,
+        graphiqlExpress({ endpointURL: '/graphql',
+          subscriptionsEndpoint: `ws://localhost:5401/subscriptions`,
+        }),
+      ])
       .forRoutes({ path: '/graphiql', method: RequestMethod.GET })
       .apply(graphqlExpress(req => ({ schema, rootValue: req })))
       .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
@@ -48,7 +59,7 @@ export class ApplicationModule {
     const delegates = this.graphQLFactory.createDelegates();
     return mergeSchemas({
       schemas: [schema, linkTypeDefs],
-      resolvers: [ delegates, ScalarResolver ]
+      resolvers: [ delegates, ScalarResolver ],
     });
   }
 }
