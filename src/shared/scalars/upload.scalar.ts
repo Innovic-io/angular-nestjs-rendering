@@ -1,6 +1,7 @@
-import { Kind } from 'graphql/language';
+import { GraphQLScalarType, Kind } from 'graphql';
 
 function parseJSONLiteral(ast) {
+  console.log(ast);
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:
@@ -23,10 +24,11 @@ function parseJSONLiteral(ast) {
   }
 }
 
-const UploadedFile = {
-  __parseLiteral: parseJSONLiteral,
-  __serialize: value => value,
-  __parseValue: value => value,
-};
+const UploadedFile = new GraphQLScalarType({
+  name: 'UploadedFile',
+  parseLiteral: parseJSONLiteral,
+  serialize: value =>  value,
+  parseValue: value => value,
+});
 
-export { UploadedFile as default };
+export default UploadedFile;

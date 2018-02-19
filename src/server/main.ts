@@ -25,7 +25,7 @@ async function bootstrap() {
     serverRender(app);
   }
 
-  const server = await NestFactory.create(ApplicationModule, app);
+  const server = await NestFactory.create(ApplicationModule, app, {});
 
   await server.listen(process.env.PORT || 3666);
 }

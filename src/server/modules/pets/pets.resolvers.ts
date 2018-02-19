@@ -210,7 +210,6 @@ export class PetsResolvers {
   @Mutation()
   async uploadProfilePicture(root, { id, files }, context) {
     // you can now access files parameter from variables
-    // console.log('uploadProfilePicture', { id, files });
     return files.toString();
   }
 

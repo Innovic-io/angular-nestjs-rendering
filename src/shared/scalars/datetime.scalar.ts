@@ -1,5 +1,4 @@
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
+import { GraphQLScalarType, Kind } from 'graphql';
 
 const parseValue = (value) => {
 
@@ -21,8 +20,7 @@ const parseLiteral = (ast) => {
 
 const DateTime = new GraphQLScalarType({
   name: 'DateTime',
-  description: 'An ISO-8601 encoded UTC date string.',
   serialize, parseValue, parseLiteral,
 });
 
-export { DateTime as default };
+export default DateTime;

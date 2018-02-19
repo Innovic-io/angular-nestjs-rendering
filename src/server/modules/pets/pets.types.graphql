@@ -10,7 +10,7 @@ type Query {
 
 type Mutation {
   createPet(name: String!, species: PetSpeciesInput!,
-    age: Int, owner: String!): Owner
+    age: Int, owner: String!, dateAdopted: DateTime): Owner
   updatePet(_id: ID!, name: String,
     species: PetSpeciesInput, age: Int
   ): Owner
@@ -58,7 +58,7 @@ type Pet {
   name: String
   species: PetSpecies
   age: Int
-  dateAdopted: String
+  dateAdopted: DateTime
 }
 
 type Account {
