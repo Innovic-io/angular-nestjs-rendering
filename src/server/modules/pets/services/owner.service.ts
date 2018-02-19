@@ -66,6 +66,7 @@ export class OwnerService {
 
     Object.assign(pet, {
       _id: createObjectID(),
+      dateAdopted: new Date()
     });
 
     return this.addPetToOwner(owner, pet);
@@ -92,7 +93,7 @@ export class OwnerService {
     return deletedOwner.value;
   }
 
-  async findAll() {
+  async findAll(): Promise<IOwner[]> {
 
     return await this.collection.find({}).toArray();
   }

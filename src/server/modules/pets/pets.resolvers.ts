@@ -8,7 +8,7 @@ import { PetsGuard } from './pets.guard';
 import { OwnerService } from './services/owner.service';
 import { dummyAccount } from './dummy.data';
 import { ApolloError } from 'apollo-client';
-import { ObjectID } from 'bson';
+import { ObjectID } from 'mongodb';
 import { WRONG_ID_ERROR } from './pets.constants';
 import { createObjectID } from './services/service.helper';
 
@@ -24,6 +24,7 @@ export class PetsResolvers {
   @Query()
   @UseGuards(PetsGuard)
   async getOwners() {
+
     return await this.ownerService.findAll();
   }
 
@@ -206,6 +207,13 @@ export class PetsResolvers {
     return newBankAccount;
   }
 
+  @Mutation()
+  async uploadProfilePicture(root, { id, files }, context) {
+    // you can now access files parameter from variables
+    console.log('uploadProfilePicture', { id, files });
+    // ...
+  }
+
   /**
    * Get Owners account
    *
@@ -228,11 +236,14 @@ export class PetsResolvers {
   @Subscription('dateChanged')
   async dateChanged(obj, args, context, info) {
 
+    console.log('args');
+
+    console.log(args);
     return {
 
-      subscribe: () => {
-
-        return ownerSubscription.asyncIterator('dateChanged');
+      subscribe: async () => {
+        console.log(args);
+        return await ownerSubscription.asyncIterator('dateChanged');
       },
     };
   }

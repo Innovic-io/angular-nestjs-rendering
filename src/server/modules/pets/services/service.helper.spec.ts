@@ -1,5 +1,5 @@
 import { createObjectID } from './service.helper';
-import { ObjectID } from 'bson';
+import { ObjectID } from 'mongodb';
 
 describe('service helper', () => {
 

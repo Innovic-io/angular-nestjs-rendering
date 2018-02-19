@@ -1,13 +1,14 @@
 import { MiddlewaresConsumer, Module, RequestMethod } from '@nestjs/common';
 import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
+import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
 
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
 import { PetsModule } from './modules/pets/pets.module';
-import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
 import { linkTypeDefs } from './link.typedefs';
 import { ChirpsModule } from './modules/chirps/chirps.module';
+import { ScalarResolver } from '../shared/scalar.resoler';
 
 @Module({
   imports: [
@@ -47,7 +48,7 @@ export class ApplicationModule {
     const delegates = this.graphQLFactory.createDelegates();
     return mergeSchemas({
       schemas: [schema, linkTypeDefs],
-      resolvers: delegates,
+      resolvers: [ delegates, ScalarResolver ]
     });
   }
 }

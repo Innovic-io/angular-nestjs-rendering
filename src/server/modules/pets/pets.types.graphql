@@ -1,3 +1,7 @@
+scalar DateTimeScalar
+
+scalar UploadedFile
+
 type Query {
   getOwnerById(_id: ID!): Owner
   getOwners: [Owner]
@@ -6,7 +10,7 @@ type Query {
 
 type Mutation {
   createPet(name: String!, species: PetSpeciesInput!,
-    age: Int, owner: ID!): Owner
+    age: Int, owner: String!): Owner
   updatePet(_id: ID!, name: String,
     species: PetSpeciesInput, age: Int
   ): Owner
@@ -23,6 +27,7 @@ type Mutation {
   deleteOwner(_id: ID!): Owner
 
   addAccountToOwner(ownerId: ID!, amount: Int!): Account
+  uploadProfilePicture(id: Int!, files: [UploadedFile!]!): ProfilePicture
 }
 
 input PetSpeciesInput {
@@ -69,7 +74,5 @@ enum SpeciesTypeEnum {
 }
 
 type Subscription {
-  dateChanged(something: String): Owner
+  dateChanged(something: String): Pet
 }
-
-scalar DateTime
