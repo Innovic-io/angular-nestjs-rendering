@@ -4,7 +4,6 @@ import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
 import graphqlExpressUpload from 'graphql-server-express-upload';
 import * as multer from 'multer';
-import bodyParser = require('body-parser');
 
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
@@ -43,7 +42,6 @@ export class ApplicationModule {
     consumer
       .apply([
         upload,
-        bodyParser.json(),
         graphqlExpressUpload,
         graphiqlExpress({ endpointURL: '/graphql',
           subscriptionsEndpoint: `ws://localhost:5401/subscriptions`,
@@ -57,13 +55,15 @@ export class ApplicationModule {
   createSchema() {
     const typeDefs = this.graphQLFactory.mergeTypesByPaths('./**/*.graphql');
     const schema = this.graphQLFactory.createSchema({
-      typeDefs: typeDefs,
-      resolvers: [ ScalarResolver ] });
+      typeDefs,
+      resolvers: ScalarResolver
+    });
 
     const delegates = this.graphQLFactory.createDelegates();
+
     return mergeSchemas({
       schemas: [schema, linkTypeDefs],
-      resolvers: delegates
+      resolvers: delegates,
     });
   }
 }

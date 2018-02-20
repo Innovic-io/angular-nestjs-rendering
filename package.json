@@ -59,7 +59,7 @@
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
-    "@angular/cli": "^1.7.0",
+    "@angular/cli": "1.6.8",
     "@angular/compiler-cli": "^5.2.5",
     "@angular/language-service": "^5.2.5",
     "@types/dotenv": "^4.0.2",
@@ -85,6 +85,6 @@
     "ts-loader": "^3.5.0",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "~2.4.2"
+    "typescript": "2.6.2"
   }
 }

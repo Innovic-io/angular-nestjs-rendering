@@ -1,7 +1,7 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
 function parseJSONLiteral(ast) {
-  console.log(ast);
+
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:
