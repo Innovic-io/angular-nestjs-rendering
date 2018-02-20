@@ -5,7 +5,9 @@
 
 <button (click)="createPet()">Create pet</button>
 <br>
-Get Owner by ID: <input name="name3">
+Get Owner by ID: <input>
 <button (click)="getOwnerById()">Get owner</button>
 <br>
 {{ result$ | async | json }}
+<br>
+<input (change)="uploadFile($event?.target?.files)" name="file" type="file" >
