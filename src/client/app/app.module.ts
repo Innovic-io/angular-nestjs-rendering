@@ -13,6 +13,7 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { PingService } from './shared/services/ping.services';
 import { PetsComponent } from './pets/pets.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
 
@@ -26,6 +27,8 @@ const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
   imports: [
     BrowserModule.withServerTransition({ appId: 'nestJS' }),
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
     SocketIoModule.forRoot(config),
     HttpClientModule, // provides HttpClient for HttpLink
     ApolloModule,

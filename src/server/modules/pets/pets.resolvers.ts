@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Middleware, UseGuards } from '@nestjs/common';
 import { DelegateProperty, Mutation, Query, ResolveProperty, Resolver, Subscription } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
 import { PubSub } from 'graphql-subscriptions';

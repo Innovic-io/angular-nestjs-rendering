@@ -1,6 +1,6 @@
 scalar DateTime
 
-scalar UploadedFile
+scalar Upload
 
 type Query {
   getOwnerById(_id: ID!): Owner
@@ -27,7 +27,7 @@ type Mutation {
   deleteOwner(_id: ID!): Owner
 
   addAccountToOwner(ownerId: ID!, amount: Int!): Account
-  uploadProfilePicture(id: Int!, files: [UploadedFile!]!): String
+  uploadProfilePicture(id: Int!, files: [Upload!]!): String
 }
 
 input PetSpeciesInput {

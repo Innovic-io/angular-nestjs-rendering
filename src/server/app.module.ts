@@ -2,7 +2,7 @@ import { MiddlewaresConsumer, Module, RequestMethod } from '@nestjs/common';
 import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
-import graphqlExpressUpload from 'graphql-server-express-upload';
+import { apolloUploadExpress, GraphQLUpload } from 'apollo-upload-server';
 import * as multer from 'multer';
 import bodyParser = require('body-parser');
 
@@ -11,12 +11,8 @@ import { EventsGateway } from './events.gateway.';
 import { PetsModule } from './modules/pets/pets.module';
 import { linkTypeDefs } from './link.typedefs';
 import { ChirpsModule } from './modules/chirps/chirps.module';
-import { ScalarResolver } from '../shared/scalar.resoler';
 import { FILES_FOLDER_PATH } from '../shared/constants';
-
-const upload = multer({
-  dest: FILES_FOLDER_PATH,
-});
+import DateTime from '../shared/scalars/datetime.scalar';
 
 @Module({
   imports: [
@@ -42,9 +38,8 @@ export class ApplicationModule {
 
     consumer
       .apply([
-        upload,
         bodyParser.json(),
-        graphqlExpressUpload,
+        apolloUploadExpress(),
         graphiqlExpress({ endpointURL: '/graphql',
           subscriptionsEndpoint: `ws://localhost:5401/subscriptions`,
         }),
@@ -58,7 +53,10 @@ export class ApplicationModule {
     const typeDefs = this.graphQLFactory.mergeTypesByPaths('./**/*.graphql');
     const schema = this.graphQLFactory.createSchema({
       typeDefs,
-      resolvers: ScalarResolver,
+      resolvers: {
+        Upload: GraphQLUpload,
+        DateTime
+      },
     });
 
     const delegates = this.graphQLFactory.createDelegates();
