@@ -3,15 +3,12 @@ import { GraphQLFactory, GraphQLModule } from '@nestjs/graphql';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
 import { apolloUploadExpress, GraphQLUpload } from 'apollo-upload-server';
-import * as multer from 'multer';
-import bodyParser = require('body-parser');
 
 import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
 import { PetsModule } from './modules/pets/pets.module';
 import { linkTypeDefs } from './link.typedefs';
 import { ChirpsModule } from './modules/chirps/chirps.module';
-import { FILES_FOLDER_PATH } from '../shared/constants';
 import DateTime from '../shared/scalars/datetime.scalar';
 
 @Module({
@@ -38,7 +35,6 @@ export class ApplicationModule {
 
     consumer
       .apply([
-        bodyParser.json(),
         apolloUploadExpress(),
         graphiqlExpress({ endpointURL: '/graphql',
           subscriptionsEndpoint: `ws://localhost:5401/subscriptions`,
@@ -55,7 +51,7 @@ export class ApplicationModule {
       typeDefs,
       resolvers: {
         Upload: GraphQLUpload,
-        DateTime
+        DateTime,
       },
     });
 

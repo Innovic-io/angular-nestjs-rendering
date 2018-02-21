@@ -5,6 +5,7 @@ import { IOwner, IPet } from '../interfaces/pet.interface';
 import { DATABASE_TOKEN } from '../../database/database.constants';
 import { IDatabase } from '../../database/interfaces/database.interface';
 import { createObjectID } from './service.helper';
+import { FileInterface } from '../interfaces/file.interface';
 
 @Component()
 // tslint:disable-next-line
@@ -152,5 +153,12 @@ export class OwnerService {
       );
 
     return result.value;
+  }
+
+  async addPicture(file: FileInterface) {
+
+    delete file.fieldname;
+
+    return this.dbService.collection('photo').insertOne(file);
   }
 }

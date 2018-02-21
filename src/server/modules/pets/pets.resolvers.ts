@@ -1,4 +1,4 @@
-import { Middleware, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { DelegateProperty, Mutation, Query, ResolveProperty, Resolver, Subscription } from '@nestjs/graphql';
 import { MergeInfo } from 'graphql-tools/dist/Interfaces';
 import { PubSub } from 'graphql-subscriptions';
@@ -207,11 +207,26 @@ export class PetsResolvers {
     return newBankAccount;
   }
 
+  /**
+   * Uploading pictures
+   *
+   * Data places:
+   *    - request.files: list of files uploaded
+   *    - args.files: list of field names
+   * @param request
+   * @param args
+   * @param context
+   * @returns {Promise<InsertOneWriteOpResult>}
+   */
   @Mutation()
-  async uploadProfilePicture(root, { id, files }, context) {
-    // you can now access files parameter from variables
-    console.log('uploadProfilePicture', { id, files });
-    return files.toString();
+  async uploadProfilePicture( request, { fileNames }, context) {
+    const [ file ] = request.files.filter((singleFile) => fileNames.indexOf(singleFile.fieldname) >= 0 );
+
+    if (!file) {
+      throw new ApolloError({ errorMessage: 'File not found' });
+    }
+
+    return await this.ownerService.addPicture(file);
   }
 
   /**

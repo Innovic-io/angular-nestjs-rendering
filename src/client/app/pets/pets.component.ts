@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-pets',
   templateUrl: './pets.component.html',
-  styleUrls: ['./pets.component.css']
+  styleUrls: [ './pets.component.css' ]
 })
 export class PetsComponent implements OnInit {
 
@@ -19,7 +19,7 @@ export class PetsComponent implements OnInit {
 
   result$: Observable<any>;
 
-  constructor(private apollo: Apollo, private httpClient: HttpClient) { }
+  constructor(private apollo: Apollo, private httpClient: HttpClient) {}
 
   ngOnInit() {
   }
@@ -54,34 +54,26 @@ export class PetsComponent implements OnInit {
   }
 
   async uploadFile(files) {
+    const uploadName = 'upload';
+    const variables = { files: uploadName };
+    const [ file ] = files;
+    const UPLOAD_PROFILE_PICTURE = `mutation uploadProfilePicture($files: [Upload!]!) {uploadProfilePicture(fileNames: $files, id: 0)}`;
+    const formData = new FormData();
 
-    const formData  = new FormData();
-    formData.append('query', '');
-    formData.append('variables', '');
+    formData.append('query', UPLOAD_PROFILE_PICTURE);
+    formData.append('variables', JSON.stringify(variables));
+    formData.append('operationName', 'uploadProfilePicture');
     formData.append('debugName', '');
-    formData.append('operationName', '');
+    formData.append(uploadName, file, file.name);
 
-    formData.append('file', files);
-
-    this.httpClient.post('http://localhost:4200/graphql' , formData) .subscribe(
+    this.result$ = this.httpClient.post('http://localhost:4200/graphql', formData);
+     /* .subscribe(
       data => {
-        console.log(data);
+        console.log('data', data);
       },
       error => {
-        console.log(error);
+        console.log('error', error);
       }
-    );
-
-    const UPLOAD_PROFILE_PICTURE = gql`mutation uploadProfilePicture($files: [Upload!]!) {
-      uploadProfilePicture(files: $files, id: 0)
-    }`;
-
-    const variables = { files };
-
-    console.log('send file', variables);
-    this.result$ = this.apollo.mutate({
-      variables: variables,
-      mutation: UPLOAD_PROFILE_PICTURE,
-    });
+    );*/
   }
 }

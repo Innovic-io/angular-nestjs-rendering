@@ -1,6 +1,7 @@
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
+import * as multer from 'multer';
 
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
@@ -18,6 +19,8 @@ import { FOLDER_CLIENT, FOLDER_DIST } from '../shared/constants';
 import { ApplicationModule } from './app.module';
 
 const app = express();
+
+app.post('/graphql', multer().any(), (req, res, next) => next() );
 
 async function bootstrap() {
 

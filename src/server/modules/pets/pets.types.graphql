@@ -27,7 +27,7 @@ type Mutation {
   deleteOwner(_id: ID!): Owner
 
   addAccountToOwner(ownerId: ID!, amount: Int!): Account
-  uploadProfilePicture(id: Int!, files: [Upload!]!): String
+  uploadProfilePicture(id: Int!, fileNames: [String!]!): String
 }
 
 input PetSpeciesInput {
