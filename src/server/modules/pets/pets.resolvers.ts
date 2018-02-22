@@ -29,6 +29,12 @@ export class PetsResolvers {
   }
 
   @Query()
+  async getImage(obj, { id }) {
+
+    return await this.ownerService.getPicture(id);
+  }
+
+  @Query()
   async getPetById(obj, { _id }, context?, info?) {
 
     if (!ObjectID.isValid(_id)) {
@@ -244,6 +250,20 @@ export class PetsResolvers {
     return await this.bankAccount
       .filter((account) => account.ownerId.equals(_id));
 
+  }
+
+  @ResolveProperty('pets')
+  async resolveImage({ pets }) {
+
+
+    const petts = pets.map(async(pet) => {
+
+      return Object.assign({}, pet, {
+        image: await this.ownerService.getPicture(pet.image)
+      });
+    });
+
+    return petts;
   }
 
   // TODO this need improvement

@@ -1,11 +1,12 @@
 import { Component, Inject } from '@nestjs/common';
-import { Collection } from 'mongodb';
+import { Collection, GridFSBucket } from 'mongodb';
 
 import { IOwner, IPet } from '../interfaces/pet.interface';
 import { DATABASE_TOKEN } from '../../database/database.constants';
 import { IDatabase } from '../../database/interfaces/database.interface';
 import { createObjectID } from './service.helper';
 import { FileInterface } from '../interfaces/file.interface';
+import { Readable } from 'stream';
 
 @Component()
 // tslint:disable-next-line
@@ -159,6 +160,37 @@ export class OwnerService {
 
     delete file.fieldname;
 
-    return this.dbService.collection('photo').insertOne(file);
+    const bucket = new GridFSBucket(this.dbService, {
+      bucketName: 'avatars',
+    });
+
+    const readablePhotoStream = new Readable();
+    readablePhotoStream.push(file.buffer);
+    readablePhotoStream.push(null);
+
+    const uploadStream = bucket.openUploadStream(file.originalname);
+    readablePhotoStream.pipe(uploadStream);
+    console.log(uploadStream.id);
+    uploadStream.on('finish', () => {
+      return true;
+    });
+  }
+
+  getPicture(id) {
+
+    return new Promise((resolve) => {
+
+      const bucket = new GridFSBucket(this.dbService, {
+        bucketName: 'avatars',
+      });
+
+      const stream = bucket.openDownloadStream(createObjectID(id));
+      
+      stream.on('data', (data) => {
+        resolve(data.toString());
+      });
+
+    });
+
   }
 }

@@ -6,10 +6,11 @@ type Query {
   getOwnerById(_id: ID!): Owner
   getOwners: [Owner]
   getPetById(_id: ID!): Pet
+  getImage(id: ID!): String
 }
 
 type Mutation {
-  createPet(name: String!, species: PetSpeciesInput!,
+  createPet(name: String!, image: String!, species: PetSpeciesInput!,
     age: Int, owner: String!, dateAdopted: DateTime): Owner
   updatePet(_id: ID!, name: String,
     species: PetSpeciesInput, age: Int
@@ -58,6 +59,7 @@ type Pet {
   name: String
   species: PetSpecies
   age: Int
+  image: String
   dateAdopted: DateTime
 }
 
