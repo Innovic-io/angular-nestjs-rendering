@@ -1,4 +1,4 @@
-# Angular NestJS Server Rendering
+# Angular NestJS Universal ( Server Rendering )
 
 - src/client <-- Angular 5+
 - src/server <-- NestJS

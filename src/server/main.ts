@@ -55,6 +55,10 @@ function serverRender(expressApp: express.Express) {
       // DI so that we can get lazy-loading to work differently (since we need it to just instantly render it)
       extraProviders: [
         provideModuleMap(LAZY_MODULE_MAP),
+        {
+          provide: 'serverUrl',
+          useValue: `${options.req.protocol}://${options.req.get('host')}`
+        }
       ],
     }).then(html => {
       callback(null, html);

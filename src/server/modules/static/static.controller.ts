@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
 import { join } from 'path';
 
 import { FOLDER_CLIENT, FOLDER_DIST } from '../../../shared/constants';
@@ -7,8 +7,8 @@ import { FOLDER_CLIENT, FOLDER_DIST } from '../../../shared/constants';
 export class StaticController {
 
   @Get('*')
-  serveStatic(@Res() res, @Req() req) {
+  serveStatic(@Res() res) {
 
-    res.render(join(FOLDER_DIST, FOLDER_CLIENT, 'index.html'), { req });
+    return res.sendFile(join(FOLDER_DIST, FOLDER_CLIENT, 'index.html'));
   }
 }
