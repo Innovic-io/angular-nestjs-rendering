@@ -6,6 +6,20 @@
 
  <a href="https://angular.io" target="blank"><img height="155px" src="https://angular.io/assets/images/logos/angular/angular.svg" /></a>
  <a href="http://nestjs.com/" target="blank"><img height="155px" src="http://kamilmysliwiec.com/public/nest-logo.png#1" alt="Nest Logo" /></a>
+
+<table style="border: 0">
+  <tr>
+    <td><img width="200" src="http://innovic.io/assets/logo-small.png" /></td>
+    <td>
+      <ul>
+        <li>INNOVIC doo</li>
+        <li>Software consulting company for building full stack solutions.</li>
+        <li>Proficient in: NodeJS, TypeScript, Angular, MongoDB... &lt;any&gt;.js library :)</li>
+        <li><b>You have project for us? hello@innovic.io</b></li>
+      </ul>
+    </td>
+  </tr>
+</table>
   
 ### Included
 
