@@ -24,7 +24,7 @@
 ### Included
 
 - REST API
-- WebSockets  
+- WebSockets
   
 ### Install
 
@@ -36,7 +36,7 @@ npm install
 
 * Development port is on: 4200 ( inherited from angular-cli )
 
-*In development, every controller ( route ) from NestJS must be mapped in proxy.conf.json*
+**in development, every controller ( route ) from NestJS must be mapped in proxy.conf.json**
 
 ```bash
 npm start
@@ -55,4 +55,20 @@ npm run build:universal
 # test production
 
 npm run serve:universal
+```
+
+### Angular CLI generator
+
+To generate component|service|pipe|module with Angular CLI use:
+
+Add new component in Contact Module
+
+```bash
+ng generate component contact/InfoComponent --module=contact/contact.module.ts
+```
+
+### Static asset directory
+
+```bash
+src/client/assets
 ```

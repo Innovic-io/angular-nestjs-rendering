@@ -15,7 +15,7 @@ import { enableProdMode } from '@angular/core';
 import { renderModuleFactory } from '@angular/platform-server';
 import { FOLDER_CLIENT, FOLDER_DIST } from '../shared/constants';
 
-import { ApplicationModule } from './app.module';
+import { ApplicationModule } from './server.module';
 
 const app = express();
 

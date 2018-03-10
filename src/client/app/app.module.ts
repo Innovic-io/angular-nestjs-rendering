@@ -16,7 +16,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5400', options: {} };
   declarations: [
     AppComponent,
     AboutComponent,
-    ContactComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'nestJS' }),
