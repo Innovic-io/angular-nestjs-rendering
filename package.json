@@ -4,18 +4,23 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently --kill-others \"npm run server:watch\" \"ng serve --aot --progress=false --proxy-config proxy.conf.json\"",
+    "start":
+      "concurrently --kill-others \"npm run server:watch\" \"ng serve --aot --progress=false --proxy-config proxy.conf.json\"",
     "client:build": "ng build --prod",
     "client:test": "ng test",
     "client:lint": "ng lint --fix",
-    "server:lint": "tslint  './src/server/**/*.ts' -c tslint.server.json --fix",
+    "server:lint":
+      "tslint  --project ./tsconfig.json './src/server/**/*.ts' -c tslint.server.json --fix",
     "server:test": "jasmine-ts ./src/server/**/*.spec.ts",
     "e2e": "ng e2e",
     "server:watch": "nodemon",
-    "build:universal": "npm run helper:build:client-and-server && npm run helper:webpack:nest",
+    "build:universal":
+      "npm run helper:build:client-and-server && npm run helper:webpack:nest",
     "serve:universal": "node dist/server.js",
-    "helper:build:client-and-server": "ng build --prod && ng build --prod --app 1 --output-hashing=false",
-    "helper:webpack:nest": "webpack --config webpack.server.config.js --colors"
+    "helper:build:client-and-server":
+      "ng build --prod && ng build --prod --app 1 --output-hashing=false",
+    "helper:webpack:nest": "webpack --config webpack.server.config.js --colors",
+    "pretty": "pretty-quick"
   },
   "private": true,
   "dependencies": {
@@ -64,10 +69,13 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "nodemon": "^1.14.12",
+    "prettier": "^1.12.1",
+    "pretty-quick": "^1.4.1",
     "protractor": "~5.1.2",
     "ts-loader": "^3.5.0",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
+    "tslint-sonarts": "^1.6.0",
     "typescript": "~2.6.2"
   }
 }

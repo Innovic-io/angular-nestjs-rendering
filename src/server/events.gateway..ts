@@ -1,10 +1,14 @@
-import { OnGatewayConnection, OnGatewayInit, SubscribeMessage, WebSocketGateway, WsResponse } from '@nestjs/websockets';
+import {
+  OnGatewayConnection,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WsResponse
+} from '@nestjs/websockets';
 
 @WebSocketGateway()
 export class EventsGateway implements OnGatewayInit, OnGatewayConnection {
-
   afterInit(server: any): any {
-
     return undefined;
   }
 
@@ -14,7 +18,6 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection {
 
   @SubscribeMessage('events')
   onEvent(client, data): WsResponse<any> {
-
     const event = 'events';
 
     const response = {

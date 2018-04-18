@@ -5,13 +5,8 @@ import { StaticModule } from './modules/static/static.module';
 import { EventsGateway } from './events.gateway.';
 
 @Module({
-  imports: [
-    ApiModule,
-    StaticModule,
-  ],
+  imports: [ApiModule, StaticModule],
   controllers: [],
-  components: [
-    EventsGateway
-  ],
+  components: [EventsGateway]
 })
 export class ApplicationModule {}
