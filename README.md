@@ -42,6 +42,18 @@ npm install
 npm start
 ```
 
+Don't forget to Lint and Prettify your code from time to time:
+
+```bash
+
+npm run client:lint
+npm run server:lint
+
+npm run prettify
+
+```
+
+
 ### Production
 
 * Production port is specified in .env ( default to 5400 )

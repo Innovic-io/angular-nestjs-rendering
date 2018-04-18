@@ -4,23 +4,19 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start":
-      "concurrently --kill-others \"npm run server:watch\" \"ng serve --aot --progress=false --proxy-config proxy.conf.json\"",
+    "start": "concurrently --kill-others \"npm run server:watch\" \"ng serve --aot --progress=false --proxy-config proxy.conf.json\"",
     "client:build": "ng build --prod",
     "client:test": "ng test",
     "client:lint": "ng lint --fix",
-    "server:lint":
-      "tslint  --project ./tsconfig.json './src/server/**/*.ts' -c tslint.server.json --fix",
+    "server:lint": "tslint  --project ./tsconfig.json './src/server/**/*.ts' -c tslint.server.json --fix",
     "server:test": "jasmine-ts ./src/server/**/*.spec.ts",
     "e2e": "ng e2e",
     "server:watch": "nodemon",
-    "build:universal":
-      "npm run helper:build:client-and-server && npm run helper:webpack:nest",
+    "build:universal": "npm run helper:build:client-and-server && npm run helper:webpack:nest",
     "serve:universal": "node dist/server.js",
-    "helper:build:client-and-server":
-      "ng build --prod && ng build --prod --app 1 --output-hashing=false",
+    "helper:build:client-and-server": "ng build --prod && ng build --prod --app 1 --output-hashing=false",
     "helper:webpack:nest": "webpack --config webpack.server.config.js --colors",
-    "pretty": "pretty-quick"
+    "prettify": "pretty-quick"
   },
   "private": true,
   "dependencies": {
@@ -39,7 +35,7 @@
     "@nestjs/microservices": "^4.5.8",
     "@nestjs/testing": "^4.4.0",
     "@nestjs/websockets": "^4.5.8",
-    "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
+    "@nguniversal/module-map-ngfactory-loader": "^5.0.0",
     "copy-webpack-plugin": "^4.4.1",
     "core-js": "^2.4.1",
     "dotenv": "^4.0.0",
